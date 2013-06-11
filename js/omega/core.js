@@ -1,5 +1,5 @@
 define([], {
-    init: function() {
-        alert('test');
+    init: function(classname, width, height) {
+        
     }               
 });
