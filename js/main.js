@@ -1,4 +1,4 @@
-require(['js/config.js'], function () {
+require(['js/require.config.js'], function () {
   'use strict';
   
   require(['omega'], function (Ω) {

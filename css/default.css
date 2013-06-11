@@ -14,10 +14,10 @@ body {
 }
 
 .omegajs {
-    width: 800px;
-    height: 600px;
     border: 1px solid #FFFFFF;
     margin: 0 auto;
+    position: relative;
+    overflow: hidden;
 }
 
 @media screen and (min-height:700px) {
