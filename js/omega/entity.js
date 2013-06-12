@@ -19,11 +19,13 @@ define(['omega', 'omegaLib/obj'], function (Ω, obj) {
       },
       
       bind: function(event, callback) {
-        Ω.bind(event, callback, this);          
+        Ω.bind(event, callback, this); 
+        return this;
       },
               
       trigger: function(event) {
         Ω.trigger(event);
+        return this;
       },
               
       extend: function(obj, using) {

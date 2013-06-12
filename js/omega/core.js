@@ -30,9 +30,10 @@ define([
                     width: width+'px',
                     height: height+'px',
                     backgroundColor: 'red'
-                });         
-                
-        //this.lockStage();        
+                });
+              
+        this.stage.lock();
+        
         pulse.bind('EnterFrame', function(){ Ω.trigger('EnterFrame'); }).start();
     },
                  
@@ -56,10 +57,6 @@ define([
         return this;
     },
     
-    lockStage: function() {
-        this.stage.bind('onselectstart', function(){ return false; });
-        this.stage.bind('oncontextmenu', function(){ return false; });
-    },
             
     getScaling: function(width, height) {
         var scale = Math.min(

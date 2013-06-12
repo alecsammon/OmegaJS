@@ -1,37 +1,48 @@
-define(['omegaLib/device'], function (device) {
+define(['omegaLib/device'], function(device) {
 
-  'use strict';
+    'use strict';
 
-  var object = function(elem) {
-      this.elem = elem;
-      
-      this.bind = function(name, callback) {
-          this.elem[name] = callback;
-      }
-      
-      this.setStyle = function(styleType, style) {                      
-          switch(styleType) {
-            case 'TransformOrigin':
-            case 'Transform':
-                this.elem.style[device.getCssPrefix()+styleType] = style;
-                break;
-            default:
-                this.elem.style[styleType] = style;
-          }          
-      }
-      
-      this.setStyles = function(styles) {
-        for (var key in styles){
-            if (typeof styles[key] !== 'function') {
-                 this.setStyle(key, styles[key]);
-            }
+    var object = function(elem) {
+        this.elem = elem;
+
+        this.lock = function() {
+            this.elem.onselectstart = function() {
+                return false;
+            };
+            this.elem.oncontextmenu = function() {
+                return false;
+            };
+
+            return this;
         }
-      }
-      
-      this.appendChild = function(child) {
-        this.elem.appendChild(child.elem);
-      }        
-  };
-  
-  return object;
+
+        this.setStyle = function(styleType, style) {
+            switch (styleType) {
+                case 'TransformOrigin':
+                case 'Transform':
+                    this.elem.style[device.getCssPrefix() + styleType] = style;
+                    break;
+                default:
+                    this.elem.style[styleType] = style;
+            }
+            return this;
+        }
+
+        this.setStyles = function(styles) {
+            for (var key in styles) {
+                if (typeof styles[key] !== 'function') {
+                    this.setStyle(key, styles[key]);
+                }
+            }
+
+            return this;
+        }
+
+        this.appendChild = function(child) {
+            this.elem.appendChild(child.elem);
+            return this;
+        }
+    };
+
+    return object;
 });

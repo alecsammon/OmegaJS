@@ -3,10 +3,7 @@ define(['omegaLib/entity'], function (e) {
   'use strict';
   
   return e.extends({
-        init: function(data) {
-            
-            alert(data);
-            
+        init: function(data) {            
             this.setStyles({
                 width: '100px',
                 height: '100px',
