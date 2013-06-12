@@ -1,4 +1,4 @@
-define(['omegaLib/device'], function(device) {
+define(['omega/device'], function(device) {
 
     'use strict';
 

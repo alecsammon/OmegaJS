@@ -1,4 +1,4 @@
-define(['omega', 'omegaLib/obj'], function (Ω, obj) {
+define(['omegaCore', 'omega/obj'], function (Ω, obj) {
 
   'use strict';
 

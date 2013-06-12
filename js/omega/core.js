@@ -1,8 +1,8 @@
 define([
     'sizzle', 
-    'omegaLib/device',
-    'omegaLib/obj',
-    'omegaLib/pulse'
+    'omega/device',
+    'omega/obj',
+    'omega/pulse'
 ], function (s, device, obj, pulse) {
 
   'use strict';
@@ -34,7 +34,7 @@ define([
               
         this.stage.lock();
         
-        pulse.bind('EnterFrame', function(){ Ω.trigger('EnterFrame'); }).start();
+        pulse.bind(function(){ Ω.trigger('EnterFrame'); }).start();
     },
                  
     trigger: function(action) {
