@@ -1,19 +1,18 @@
 define([
     'sizzle', 
     'omegaLib/device',
-    'omegaLib/object'
-], function (s, device, o) {
+    'omegaLib/obj',
+    'omegaLib/pulse'
+], function (s, device, obj, pulse) {
 
   'use strict';
 
   var Ω = {
-    stage: new o(document.createElement('div')),
+    stage: new obj(document.createElement('div')),
     container: null,
     
     init: function(classname, width, height) {
-        this.container = new o(s('.'+classname)[0]);
-        
-        console.log(this.container);
+        this.container = new obj(s('.'+classname)[0]);
         
         var scale = this.getScaling(width, height);
         
@@ -32,9 +31,14 @@ define([
                     backgroundColor: 'red'
                 });         
                 
-        //this.lockStage();
+        //this.lockStage();        
+        pulse.bind('EnterFrame', function(){ Ω.trigger('EnterFrame'); }).start();
     },
-            
+                    
+    trigger: function(e) {
+        console.log(pulse.actualFps);
+    },
+    
     lockStage: function() {
         this.stage.bind('onselectstart', function(){ return false; });
         this.stage.bind('oncontextmenu', function(){ return false; });

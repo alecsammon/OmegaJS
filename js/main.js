@@ -1,8 +1,12 @@
-require(['js/require.config.js'], function () {
+require(['js/require.config.js'], function (player) {
   'use strict';
   
-  require(['omega'], function (Ω) {
-      Ω.init('omegajs', 800, 600);
+  require([
+      'omega', 
+      'entity/player' 
+    ], function (Ω, player) {
+      Ω.init('omegajs', 800, 600);      
+      new player;
   });
   
 });
