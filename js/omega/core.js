@@ -10,6 +10,7 @@ define([
   var Ω = {
     stage: new obj(document.createElement('div')),
     container: null,
+    binds: [],
     
     init: function(classname, width, height) {
         this.container = new obj(s('.'+classname)[0]);
@@ -34,9 +35,25 @@ define([
         //this.lockStage();        
         pulse.bind('EnterFrame', function(){ Ω.trigger('EnterFrame'); }).start();
     },
-                    
-    trigger: function(e) {
-        console.log(pulse.actualFps);
+                 
+    trigger: function(action) {
+        if(this.binds[action]) {
+            for (var i = 0; i < this.binds[action].length; i++) {
+                this.binds[action][i]['call'].call(this.binds[action][i]['context']);
+              }
+        }
+
+          return this;
+    },        
+
+    bind: function(action, call, context) {
+        if(!this.binds[action]) {
+            this.binds[action] = [];
+        }
+
+        this.binds[action].push({'call':call, 'context':context});
+
+        return this;
     },
     
     lockStage: function() {
@@ -55,6 +72,10 @@ define([
         }
         
         return scale;
+    },
+            
+    addEntity: function(e) {
+        this.stage.appendChild(e);
     }
         
   };

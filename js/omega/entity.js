@@ -1,21 +1,36 @@
-define(['omega'], function (Ω) {
+define(['omega', 'omegaLib/obj'], function (Ω, obj) {
 
   'use strict';
 
   return {
+      extends: function(e) {
+         var test = new obj(document.createElement('div'));
+         this.extend(e, test);
+         
+         this.extend(e, this);          
+         Ω.addEntity(e);
+                   
+         return function(){ 
+            if(typeof e.init === 'function') {
+                e.init.apply(e, arguments);
+            }
+            return e; 
+         }; 
+      },
+      
       bind: function(event, callback) {
-        Ω.bind(event, callback);          
+        Ω.bind(event, callback, this);          
       },
               
       trigger: function(event) {
         Ω.trigger(event);
       },
               
-      extends: function(obj) {
+      extend: function(obj, using) {
         var key;
-        for (key in this) {
-            if (obj !== this[key]) { //handle circular reference
-                obj[key] = this[key];
+        for (key in using) {
+            if (obj !== using[key]) { //handle circular reference
+                obj[key] = using[key];
             }
         }
         
