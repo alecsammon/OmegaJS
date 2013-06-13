@@ -1,4 +1,4 @@
-define([], function() {
+define(['omega/performance'], function(performance) {
 
     var fps = 60,
         frameDurations = [],
@@ -7,6 +7,7 @@ define([], function() {
         actualFps = 0,
 
         bind = function(callback) {
+            console.log(performance.now());
             binds.push(callback);
         },
 
