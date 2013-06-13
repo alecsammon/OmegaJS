@@ -1,4 +1,4 @@
-define(['omega/device'], function(device) {
+define([], function() {
 
     'use strict';
 
@@ -6,19 +6,14 @@ define(['omega/device'], function(device) {
      * Provides a stardard way of getting performance.now across browsers
      * @see http://gent.ilcore.com/2012/06/better-timer-for-javascript.html
      **/
-    window.performance = window.performance || {};
-    performance.now = (function() {
-        return performance.now       ||
-             performance.mozNow    ||
-             performance.msNow     ||
-             performance.oNow      ||
-             performance.webkitNow ||
-             function() { return new Date().getTime(); };
-    })();
-
     return {
         now: function() {
-  		return performance.now();
+            return  performance.now()       ||
+                    performance.mozNow()    ||
+                    performance.msNow()     ||
+                    performance.oNow()      ||
+                    performance.webkitNow() ||
+                    new Date().getTime();
         }
     }
 

@@ -2,8 +2,7 @@ OmegaJS - A Javascript game engine
 - 
 
 @todo
-unbind()
-components
+- components
  - wind
  - gravity
  - mouse

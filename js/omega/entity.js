@@ -5,7 +5,7 @@ define(['omegaCore', 'omega/obj'], function(Ω, obj) {
     var entity = {
         x: 0,
         y: 0,
-        
+
         watchAttr: function(propName, style) {
             Object.defineProperty(this, propName, {
                 set: function(value) {
@@ -15,29 +15,29 @@ define(['omegaCore', 'omega/obj'], function(Ω, obj) {
                 get: function() {
                     return this['_'+propName];
                 }
-            });   
-            
+            });
+
             return this;
         },
-        
+
         watch: function() {
             this.watchAttr('y', 'bottom').watchAttr('x', 'left').watchAttr('w', 'width').watchAttr('h', 'height');
         },
-        
+
         extends: function(e) {
             var w = e.w,
-                h = e.h;                    
-            
+                h = e.h;
+
             var test = new obj(document.createElement('div'));
             this.extend(e, test);
-            
+
             this.extend(e, this);
-            Ω.addEntity(e);                
+            Ω.addEntity(e);
             e.watch();
-       
+
             e.w = w;
             e.h = h;
-            
+
             return function() {
                 if (typeof e.init === 'function') {
                     e.init.apply(e, arguments);
@@ -45,17 +45,22 @@ define(['omegaCore', 'omega/obj'], function(Ω, obj) {
                 return e;
             };
         },
-                
+
         bind: function(event, callback) {
             Ω.bind(event, callback, this);
             return this;
         },
-                
+
         trigger: function(event) {
             Ω.trigger(event);
             return this;
         },
-                
+
+        unbind: function(event) {
+            Ω.unbind(event, this);
+            return this;
+        },
+
         extend: function(obj, using) {
             var key;
             for (key in using) {
