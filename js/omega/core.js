@@ -1,9 +1,8 @@
 define([
-    'sizzle', 
     'omega/device',
     'omega/obj',
     'omega/pulse'
-], function (s, device, obj, pulse) {
+], function (device, obj, pulse) {
 
   'use strict';
 
@@ -12,8 +11,8 @@ define([
     container: null,
     binds: [],
     
-    init: function(classname, width, height) {
-        this.container = new obj(s('.'+classname)[0]);
+    init: function(container, width, height) {
+        this.container = new obj(container);
         
         var scale = this.getScaling(width, height);
         
