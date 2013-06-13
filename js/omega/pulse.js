@@ -7,7 +7,6 @@ define(['omega/performance'], function(performance) {
         actualFps = 0,
 
         bind = function(callback) {
-            console.log(performance.now());
             binds.push(callback);
         },
 

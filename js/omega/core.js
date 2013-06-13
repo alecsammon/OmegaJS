@@ -6,7 +6,7 @@ define([
 
   'use strict';
 
-  var Ω = {
+  return {
     stage: new obj(document.createElement('div')),
     container: null,
     binds: [],
@@ -15,6 +15,8 @@ define([
         this.container = new obj(container);
         
         var scale = this.getScaling(width, height);
+        this.width = width;
+        this.height = height;
         
         this.container.appendChild(this.stage);
         
@@ -33,7 +35,8 @@ define([
               
         this.stage.lock();
         
-        pulse.bind(function(){ Ω.trigger('EnterFrame'); }).start();
+        self = this;
+        pulse.bind(function(){ self.trigger('EnterFrame'); }).start();
     },
                  
     trigger: function(action) {
@@ -75,6 +78,4 @@ define([
     }
         
   };
-  
-  return Ω;
 });
