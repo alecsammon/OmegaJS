@@ -9,13 +9,14 @@ define([
     return {
         stage: new obj(document.createElement('div')),
         container: null,
-        binds: {},
+        
         init: function(container, width, height) {
+            pulse.start();
             this.container = new obj(container);
 
             var scale = this.getScaling(width, height);
-            this.width = width;
-            this.height = height;
+            this.width = width * scale;
+            this.height = height * scale;
 
             this.container.appendChild(this.stage);
 
@@ -33,40 +34,8 @@ define([
             });
 
             this.stage.lock();
-
-            self = this;
-            pulse.bind(function() {
-                self.trigger('EnterFrame');
-            }).start();
         },
-        trigger: function(action) {
-            if (this.binds[action]) {
-                for (var i in this.binds[action]) {
-                    for (var j in this.binds[action][i]) {
-                        this.binds[action][i][j]['call'].call(this.binds[action][i][j]['context']);
-                    }
-                }
-            }
-
-
-            return this;
-        },
-        bind: function(action, call, context) {
-            if (!this.binds[action]) {
-                this.binds[action] = {};
-            }
-
-            if (!this.binds[action][context]) {
-                this.binds[action][context] = [];
-            }
-
-            this.binds[action][context].push({call: call, context: context});
-
-            return this;
-        },
-        unbind: function(action, context) {
-            delete this.binds[action][context];
-        },
+                
         getScaling: function(width, height) {
             var scale = Math.min(
                     window.innerWidth / (width + 2),
@@ -78,10 +47,8 @@ define([
             }
 
             return scale;
-        },
-        addEntity: function(e) {
-            this.stage.appendChild(e);
         }
 
+     
     };
 });

@@ -6,8 +6,8 @@ define(['omega/performance'], function(performance) {
         binds = [],
         actualFps = 0,
 
-        bind = function(callback) {
-            binds.push(callback);
+        bind = function(call, context) {
+            binds.push({call:call, context:context});
         },
 
         pulse = function() {
@@ -36,7 +36,7 @@ define(['omega/performance'], function(performance) {
 
             setTimeout(function() {
                 for (var i = 0; i < binds.length; i++) {
-                    binds[i]();
+                    binds[i].call.call(binds[i].context, actualFps);
                 }
 
                 pulse();
@@ -51,8 +51,8 @@ define(['omega/performance'], function(performance) {
             pulse();
             return this;
         },
-        bind: function(callback) {
-            bind(callback);
+        bind: function(call, context) {
+            bind(call, context);
             return this;
         },
         getFps: function() {
