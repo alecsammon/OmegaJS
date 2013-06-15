@@ -1,4 +1,4 @@
-define(['omegaCore', 'md5', 'omega/pulse'], function(o, h, pulse) {
+define(['omegaCore', 'md5'], function(o, h) {
 
     'use strict';
     return {
@@ -30,16 +30,16 @@ define(['omegaCore', 'md5', 'omega/pulse'], function(o, h, pulse) {
                     }
                 }
 
-                entity.args = args;
+                entity.initArgs = args;
                 entity.extendsList = [];
                 entity.binds = {};
                 entity.hash = this.hash;
 
                 if (init !== false && typeof entity.init === 'function') {
-                    entity.init(args);             
-                }
+                    entity.init(args);           
+                    entity.uuid = o.register(entity);
+                 }
 
-                //o.register(entity);
                 return entity;
             };
 
@@ -71,10 +71,10 @@ define(['omegaCore', 'md5', 'omega/pulse'], function(o, h, pulse) {
                 if(!alreadyInitialised) {
                    if(typeof arguments[i] === 'function') {
                         var newE = new arguments[i](null, false);
-                        var args = this.args;
+                        var args = this.initArgs;
                     } else {
                         var newE = arguments[i];
-                        var args = newE.args;
+                        var args = newE.initArgs;
                     }
  
                     this.extendsList.push(objHash);
@@ -93,7 +93,6 @@ define(['omegaCore', 'md5', 'omega/pulse'], function(o, h, pulse) {
             if(typeof context === 'undefined') {
                 context = this;
             }
-
             if (this.binds[action]) {
                 for (var i in this.binds[action]) {
                    this.binds[action][i].call(context, args);
@@ -106,15 +105,11 @@ define(['omegaCore', 'md5', 'omega/pulse'], function(o, h, pulse) {
 
 
         bind: function(action, call) {
-            if(action === 'EnterFrame') {
-	        pulse.bind(call, this);
-            } else {
                 if (!this.binds[action]) {
                     this.binds[action] = [];
                 }
 
                 this.binds[action].push(call);
-            }
             return this;
         },
 

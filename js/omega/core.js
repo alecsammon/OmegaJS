@@ -5,27 +5,27 @@ define([
 ], function(device, obj, pulse) {
 
     'use strict';
+    
+    var stage = new obj(document.createElement('div')),
+    container =  null,
+    attr = {width: 0, height: 0},
+    entities = [],
 
-    return {
-        stage: new obj(document.createElement('div')),
-        container: null,
-        
-        init: function(container, width, height) {
-            pulse.start();
-            this.container = new obj(container);
+    init = function(container, width, height) {
+            container = new obj(container);
 
-            var scale = this.getScaling(width, height);
-            this.width = width * scale;
-            this.height = height * scale;
+            var scale = getScaling(width, height);
+            attr.width = width * scale;
+            attr.height = height * scale;
 
-            this.container.appendChild(this.stage);
+            container.appendChild(stage);
 
-            this.container.setStyles({
+            container.setStyles({
                 width: width * scale + 'px',
                 height: height * scale + 'px'
             });
 
-            this.stage.setStyles({
+            stage.setStyles({
                 transformOrigin: '0 0',
                 transform: 'scale(' + scale + ')',
                 width: width + 'px',
@@ -33,10 +33,25 @@ define([
                 backgroundColor: 'red'
             });
 
-            this.stage.lock();
+            stage.lock();
+
+            pulse.start();
+            pulse.bind(function(args){ trigger('EnterFrame', args); });
+
         },
-                
-        getScaling: function(width, height) {
+
+        register = function(entity) {
+            entities.push(entity);
+            return entities.length;
+        },
+
+        trigger = function(action, args) {
+           for (var i in entities) {
+               entities[i].trigger(action, args);
+            }
+        },
+
+        getScaling = function(width, height) {
             var scale = Math.min(
                     window.innerWidth / (width + 2),
                     window.innerHeight / (height + 2)
@@ -48,6 +63,40 @@ define([
 
             return scale;
         }
+
+    return {
+
+        init: function(container, width, height) {
+            init(container, width, height);
+            return this;
+        },
+
+        register: function(entity) {
+            return register(entity);
+        },
+                
+        getScaling: function(width, height) {
+            return getScaling(width, height);
+        },
+
+        addElemToStage: function(elem) {
+            stage.appendChild(elem);
+        },
+
+        getWidth: function() {
+            return attr.width;
+        },
+
+        getHeight: function() {
+            return attr.height;
+        },
+ 
+        trigger: function(action, args) {
+           trigger(action, args);
+           return this;
+        }
+
+ 
 
      
     };

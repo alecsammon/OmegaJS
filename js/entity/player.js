@@ -16,25 +16,25 @@ define(['omega/entity', 'omegaCore', 'entity/dom', 'entity/click'], function(e, 
             })
 
             this.bind('EnterFrame', function(fps) {
-                this.elem.innerHTML = 'FPS:' + fps;
+                this.elem.innerHTML = 'FPS:' + fps + "<br />UUID:" + this.uuid;
                 this.move();
             });
         },
 
         move: function() {
-            if (this.x > o.width - this.w) {
+            if (this.x > o.getWidth() - this.w) {
                 this._left = false;
             } else if (this.x < 0) {
                 this._left = true;
             }
-            this.x += (this._left) ? 2 : -2;
+            this.x += (this._left) ? this.uuid : -this.uuid;
 
-            if (this.y > o.height - this.h) {
+            if (this.y > o.getHeight() - this.h) {
                 this._up = false;
             } else if (this.y < 0) {
                 this._up = true;
             }
-            this.y += (this._up) ? 2 : -2;
+            this.y += (this._up) ? this.uuid : -this.uuid;
         }
     });
 

@@ -50,7 +50,7 @@ define(['omega/entity', 'omegaCore'], function(e, o) {
                 
         init: function(args) {
             this.elem = document.createElement('div');
-            o.stage.appendChild(this);
+            o.addElemToStage(this);
             this.watch();
             this.x = (args && args.x) ? args.x : 0;
             this.y = (args && args.y) ? args.y : 0;

@@ -13,3 +13,8 @@ MD5 - http://pajhome.org.uk/crypt/md5/
  - keyboard
  - collision
 
+
+http://caniuse.com/#feat=classlist
+http://www.quirksmode.org/dom/changess.html
+http://www.hunlock.com/blogs/Totally_Pwn_CSS_with_Javascript
+http://help.dottoro.com/ljvmpkap.php
