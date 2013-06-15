@@ -2,13 +2,13 @@ define(['omega/entity', 'omegaCore', 'entity/dom', 'entity/click'], function(e, 
 
     'use strict';
 
-
     return e.extends({
         _left: true,
         _up: true,
 
-        init: function() {
-            this.depends(dom, click);
+        init: function(args) {
+            var d = new dom(args, false);
+            this.depends(d, click);
 
             this.bind('Click', function(e) {
                 this._left = !this._left;
@@ -27,14 +27,14 @@ define(['omega/entity', 'omegaCore', 'entity/dom', 'entity/click'], function(e, 
             } else if (this.x < 0) {
                 this._left = true;
             }
-            this.x += (this._left) ? 4 : -4;
+            this.x += (this._left) ? 2 : -2;
 
             if (this.y > o.height - this.h) {
                 this._up = false;
             } else if (this.y < 0) {
                 this._up = true;
             }
-            this.y += (this._up) ? 4 : -4;
+            this.y += (this._up) ? 2 : -2;
         }
     });
 

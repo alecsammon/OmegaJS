@@ -1,4 +1,4 @@
-define(['entity/click', 'omega/entity', 'omegaCore'], function(click, e, o) {
+define(['omega/entity', 'omegaCore'], function(e, o) {
 
     'use strict';
 
@@ -48,14 +48,14 @@ define(['entity/click', 'omega/entity', 'omegaCore'], function(click, e, o) {
             return this;
         },          
                 
-        init: function() {
-            this.elem = document.createElement('div'),
+        init: function(args) {
+            this.elem = document.createElement('div');
             o.stage.appendChild(this);
             this.watch();
-            this.x = 0;
-            this.y = 0;
-            this.w = 100;
-            this.h = 100;
+            this.x = (args && args.x) ? args.x : 0;
+            this.y = (args && args.y) ? args.y : 0;
+            this.w = (args && args.w) ? args.w : 0;
+            this.h = (args && args.h) ? args.h : 0;
 
             this.setStyles({
                 background: 'blue',

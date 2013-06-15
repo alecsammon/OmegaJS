@@ -3,67 +3,90 @@ define(['omegaCore', 'md5', 'omega/pulse'], function(o, h, pulse) {
     'use strict';
     return {
         extends: function(e) {
-           var self = this;
-           return function() {
-               var temp = self.extend({}, self, e);
-
-               temp.extendsList = [];
-               temp.binds = {};
-
-               if (!this.disableInit && typeof temp.init === 'function') {
-                   temp.init.apply(temp, arguments);
-               }
-
-               return temp;
-           };
-        },
-
-        extend: function(obj) {
-            var key, i;
-
-            for (i = 1; i < arguments.length; i++) {
-                for (key in arguments[i]) {
-                    if (obj !== arguments[i][key] //handle circular reference
-                       && key !== 'extends')
-                    { 
-                        obj[key] = arguments[i][key];
-                    }
+            var entityType = function () {};
+            
+            for (var key in e) {
+                if(typeof e[key] === 'function') {
+                 entityType.prototype[key] = e[key];
                 }
             }
 
-            return obj;
-        },
-        
-        depends: function(e) {
-            for (var i = 0; i < arguments.length; i++) {
-                var alreadyInitialised = false;
+            for (var key in this) {
+                if(typeof this[key] === 'function' && key !== 'extends') {
+                    entityType.prototype[key] = this[key];
+                }
+            }
 
-                arguments[i].prototype.disableInit = true;
-                var newE = new arguments[i]();
+            var returnE = function(args, init) {
+                if(!(this instanceof returnE)){
+                    throw 'You must create this object with "new"';
+                }
 
-                var objHash = h.hash(JSON.stringify(newE, function(key, value) {
-                    if (key === 'elem' || key === 'extends' || key === 'extendsList' || key === 'depends') {
-                        return undefined;
+                var entity = new entityType();
+
+                for (var key in e) {
+                    if(typeof e[key] !== 'function') {
+                        entity[key] = e[key];
                     }
-                    if (typeof value === 'function') {
-                        return value + ''; // implicitly `toString` it
+                }
+
+                entity.args = args;
+                entity.extendsList = [];
+                entity.binds = {};
+                entity.hash = this.hash;
+
+                if (init !== false && typeof entity.init === 'function') {
+                    entity.init(args);             
+                }
+
+                //o.register(entity);
+                return entity;
+            };
+
+            returnE.prototype.hash = h.hash(JSON.stringify(e, function(key, value) {
+                    if(typeof value === 'function') {
+                        return value+'';
                     }
                     return value;
                 }, ''));
+
+            return returnE;
+        },
+
+        depends: function() {
+            for (var i = 0; i < arguments.length; i++) {
+                if(typeof arguments[i] === 'function') {
+                    var objHash = arguments[i].prototype.hash;;
+                } else {
+                    var objHash = arguments[i].hash;
+                }
+
+                var alreadyInitialised = false;
 
                 for (var j = 0; j < this.extendsList.length; j++) {
                     if (this.extendsList[j] === objHash) {
                         alreadyInitialised = true;
                     }
                 }
-                
-                if (!alreadyInitialised) {
+                if(!alreadyInitialised) {
+                   if(typeof arguments[i] === 'function') {
+                        var newE = new arguments[i](null, false);
+                        var args = this.args;
+                    } else {
+                        var newE = arguments[i];
+                        var args = newE.args;
+                    }
+ 
                     this.extendsList.push(objHash);
-
-                    this.extend(this, newE);
-                    this.init();
-                }
+                    for(var key in newE) {
+                        if(key !== 'extendsList') {
+                        this[key] = newE[key];
+                        }
+                    }
+                    this.init(args);
+               }
             }
+            
         },
 
         trigger: function(action, args, context) {
@@ -99,22 +122,6 @@ define(['omegaCore', 'md5', 'omega/pulse'], function(o, h, pulse) {
             delete this.binds[action];
             return this;
         },
-
-/*
-        bind: function(event, callback) {
-            o.bind(event, callback, this);
-            return this;
-        },
-
-        trigger: function(event) {
-            o.trigger(event);
-            return this;
-        },
-
-        unbind: function(event) {
-            o.unbind(event, this);
-            return this;
-        }*/
     };
 
 
