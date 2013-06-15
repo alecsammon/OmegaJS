@@ -2,7 +2,7 @@ define(['omega/device'], function(device) {
 
     'use strict';
 
-    var object = function(elem) {
+    return function(elem) {
         this.elem = elem;
 
         this.lock = function() {
@@ -39,10 +39,8 @@ define(['omega/device'], function(device) {
         }
 
         this.appendChild = function(child) {
-            this.elem.appendChild(child.elem);
+            this.elem.appendChild(child);
             return this;
         }
     };
-
-    return object;
 });

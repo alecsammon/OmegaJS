@@ -4,8 +4,12 @@ define(['omega/entity', 'omegaCore'], function(e, o) {
 
     return e.extends({        
         elem: null,
+                
+        init: function(args) {
+            this.elem = document.createElement('div');
+            o.addElemToStage(this.elem);
 
-        watchAttr: function(propName, style) {
+            var watchAttr = function(propName, style) {
             Object.defineProperty(this, propName, {
                 set: function(value) {
                     this['_'+propName]= value;
@@ -15,17 +19,28 @@ define(['omega/entity', 'omegaCore'], function(e, o) {
                     return this['_'+propName];
                 }
             });
+             }
+
+            watchAttr.call(this, 'y', 'bottom');
+            watchAttr.call(this, 'x', 'left');
+            watchAttr.call(this, 'w', 'width');
+            watchAttr.call(this, 'h', 'height');
+
+            this.x = (args && args.x) ? args.x : 0;
+            this.y = (args && args.y) ? args.y : 0;
+            this.w = (args && args.w) ? args.w : 0;
+            this.h = (args && args.h) ? args.h : 0;
+
+            this.setStyles({
+                background: 'blue',
+                position: 'absolute',
+                border: '1px solid #FFFFFF',
+                color: '#FFFFFF'
+            });
 
             return this;
-        },       
-
-        watch: function() {
-            this.watchAttr('y', 'bottom')
-                .watchAttr('x', 'left')
-                .watchAttr('w', 'width')
-                .watchAttr('h', 'height');
         },
-                
+
         setStyle: function(styleType, style) {
             switch (styleType) {
                 case 'TransformOrigin':
@@ -40,31 +55,10 @@ define(['omega/entity', 'omegaCore'], function(e, o) {
 
         setStyles: function(styles) {
             for (var key in styles) {
-                if (typeof styles[key] !== 'function') {
-                    this.setStyle(key, styles[key]);
-                }
+                this.setStyle(key, styles[key]);
             }
-
-            return this;
-        },          
-                
-        init: function(args) {
-            this.elem = document.createElement('div');
-            o.addElemToStage(this);
-            this.watch();
-            this.x = (args && args.x) ? args.x : 0;
-            this.y = (args && args.y) ? args.y : 0;
-            this.w = (args && args.w) ? args.w : 0;
-            this.h = (args && args.h) ? args.h : 0;
-
-            this.setStyles({
-                background: 'blue',
-                position: 'absolute',
-                border: '1px solid #FFFFFF',
-                color: '#FFFFFF'
-            });
-
             return this;
         }
+
     });
 });

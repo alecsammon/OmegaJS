@@ -2,11 +2,10 @@ require(['js/require.config.js'], function (js) {
   'use strict';
   
   require([
-      'sizzle',
       'omegaCore', 
       'entity/player'
-    ], function (s, o, player) {
-      var container = s('.omegajs')[0];
+    ], function (o, player) {
+      var container = document.getElementById('omegajs');
       
       o.init(container, 800, 600); 
 

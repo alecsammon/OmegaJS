@@ -18,7 +18,7 @@ define([
             attr.width = width * scale;
             attr.height = height * scale;
 
-            container.appendChild(stage);
+            container.appendChild(stage.elem);
 
             container.setStyles({
                 width: width * scale + 'px',
