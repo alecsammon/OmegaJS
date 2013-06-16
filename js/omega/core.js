@@ -7,37 +7,50 @@ define([
     'use strict';
     
     var stage = new obj(document.createElement('div')),
-    container =  null,
-    attr = {width: 0, height: 0},
-    entities = [],
+        attr = {width: 0, height: 0},
+        entities = [],
+        binds = {},
 
-    init = function(container, width, height) {
-            container = new obj(container);
+        init = function(container, width, height) {
+                var scale = getScaling(width, height);
+                attr = {width: width * scale, height: height * scale};
 
-            var scale = getScaling(width, height);
-            attr.width = width * scale;
-            attr.height = height * scale;
+                (new obj(container))
+                    .appendChild(stage.elem)
+                    .setStyles({
+                        width: width * scale + 'px',
+                        height: height * scale + 'px',
+                        position: 'relative',
+                        overflow: 'hidden'
+                    });
 
-            container.appendChild(stage.elem);
+                stage.setStyles({
+                    transformOrigin: '0 0',
+                    transform: 'scale(' + scale + ')',
+                    width: width + 'px',
+                    height: height + 'px',
+                });
 
-            container.setStyles({
-                width: width * scale + 'px',
-                height: height * scale + 'px'
-            });
+                attr.left = stage.elem.parentNode.offsetLeft;
+                attr.top = stage.elem.parentNode.offsetTop;
 
-            stage.setStyles({
-                transformOrigin: '0 0',
-                transform: 'scale(' + scale + ')',
-                width: width + 'px',
-                height: height + 'px',
-                backgroundColor: 'red'
-            });
+                initMouse();                
+                //stage.lock();
+                pulse.bind(function(args){ trigger('EnterFrame', args); }).start();
+            },
 
-            stage.lock();
+        initMouse = function() {
+            var triggerMouse = function(action, e) {
+                    trigger(action, {
+                        x: e.x-attr.left,
+                        y: attr.height-e.y-attr.top
+                    });
+                };
 
-            pulse.start();
-            pulse.bind(function(args){ trigger('EnterFrame', args); });
-
+            stage.elem.onclick = function(e) { triggerMouse('Click', e); };
+            stage.elem.onmousedown = function(e) { trigger('MouseDown', e); };
+            stage.elem.onmouseup = function(e) { trigger('MouseUp', e); };
+            stage.elem.onmousemove = function(e) { trigger('MouseMove', e); };
         },
 
         register = function(entity) {
@@ -46,9 +59,34 @@ define([
         },
 
         trigger = function(action, args) {
-           for (var i in entities) {
-               entities[i].trigger(action, args);
+if (binds[action]) {
+                for(var i in binds[action]) {
+                    for(var j = 0; j<binds[action][i].length; ++j) {
+                           binds[action][i][j].call(
+                               binds[action][i],
+                               args
+                           );
+                    }
+                }
             }
+        },
+
+
+        bind = function(action, call, context) {
+
+                if (!binds[action]) {
+                    binds[action] = {};
+                }
+                if(!binds[action][context]) {
+                    binds[action][context] = [];
+                }
+
+                binds[action][context].push(call);
+
+        },
+
+        unbind = function(action, context) {
+            delete binds[action][context];
         },
 
         getScaling = function(width, height) {
@@ -74,29 +112,29 @@ define([
         register: function(entity) {
             return register(entity);
         },
-                
-        getScaling: function(width, height) {
-            return getScaling(width, height);
-        },
 
         addElemToStage: function(elem) {
             stage.appendChild(elem);
         },
 
-        getWidth: function() {
-            return attr.width;
-        },
-
-        getHeight: function() {
-            return attr.height;
+        getAttr: function() { 
+            return attr;
         },
  
         trigger: function(action, args) {
            trigger(action, args);
            return this;
-        }
+        },
 
- 
+        bind: function(action, call, context) {
+           bind(action, call, context);
+           return this;
+        },
+
+        unbind: function(action, context) {
+           unbind(action, context);
+           return this;
+        }
 
      
     };

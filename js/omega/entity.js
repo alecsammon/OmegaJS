@@ -6,12 +6,20 @@ define(['omegaCore', 'md5'], function(o, h) {
             var entityType = function () {};
             
             for (var key in e) {
+                if(entityType.prototype[key]) {
+                    throw 'Trying to overwrite '+key
+                }
+
                 if(typeof e[key] === 'function') {
                  entityType.prototype[key] = e[key];
                 }
             }
 
             for (var key in this) {
+                if(entityType.prototype[key]) {
+                    throw 'Trying to overwrite '+key
+                }
+
                 if(typeof this[key] === 'function' && key !== 'extends') {
                     entityType.prototype[key] = this[key];
                 }
@@ -19,7 +27,7 @@ define(['omegaCore', 'md5'], function(o, h) {
 
             var returnE = function(args, init) {
                 if(!(this instanceof returnE)){
-                    throw 'You must create this object with "new"';
+                    return new returnE(args, false);
                 }
 
                 var entity = new entityType();
@@ -38,6 +46,7 @@ define(['omegaCore', 'md5'], function(o, h) {
                 if (init !== false && typeof entity.init === 'function') {
                     entity.init(args);           
                     entity.uuid = o.register(entity);
+                    o.bind('EnterFrame', function(args){ entity.trigger('EnterFrame', args); }, entity);
                  }
 
                 return entity;
@@ -80,13 +89,13 @@ define(['omegaCore', 'md5'], function(o, h) {
                     this.extendsList.push(objHash);
                     for(var key in newE) {
                         if(key !== 'extendsList') {
-                        this[key] = newE[key];
+                            this[key] = newE[key];
                         }
                     }
                     this.init(args);
                }
             }
-            
+            return this;    
         },
 
         trigger: function(action, args, context) {

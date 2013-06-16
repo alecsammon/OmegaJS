@@ -1,6 +1,6 @@
 define(['omega/performance'], function(performance) {
 
-    var fps = 60,
+    var targetFps = 60,
         frameDurations = [],
         framestart = performance.now(),
         binds = [],
@@ -26,10 +26,10 @@ define(['omega/performance'], function(performance) {
 
             var avg = sum / frameDurations.length;
 
-            if (avg > 1000 / fps) {
-                tweak = Math.min(Math.ceil(avg - 1000 / fps), 5);
+            if (avg > 1000 / targetFps) {
+                tweak = Math.min(Math.ceil(avg - 1000 / targetFps), 5);
             } else {
-                tweak = -Math.min(Math.ceil(1000 / fps - avg), 5);
+                tweak = -Math.min(Math.ceil(1000 / targetFps - avg), 5);
             }
 
             actualFps = Math.round(1000 / avg);
@@ -41,7 +41,7 @@ define(['omega/performance'], function(performance) {
 
                 pulse();
 
-            }, (1000 / fps) - tweak);
+            }, (1000 / targetFps) - tweak);
 
             framestart = performance.now();
         }

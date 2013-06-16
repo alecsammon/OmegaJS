@@ -10,33 +10,37 @@ define(['omega/entity', 'omegaCore'], function(e, o) {
             o.addElemToStage(this.elem);
 
             var watchAttr = function(propName, style) {
-            Object.defineProperty(this, propName, {
-                set: function(value) {
-                    this['_'+propName]= value;
-                    this.setStyle(style, value+'px');
-                },
-                get: function() {
-                    return this['_'+propName];
-                }
-            });
-             }
+                Object.defineProperty(this, propName, {
+                    set: function(value) {
+                        this['_'+propName]= value;
+                        this.setStyle(style, value+'px');
+                    },
+                    get: function() {
+                        return this['_'+propName];
+                    }
+                });
+            }
 
             watchAttr.call(this, 'y', 'bottom');
             watchAttr.call(this, 'x', 'left');
             watchAttr.call(this, 'w', 'width');
             watchAttr.call(this, 'h', 'height');
+            Object.defineProperty(this, 'text', {
+                    set: function(value) {
+                        if(this._text !== value) {
+                           this._text =  value;
+                           this.elem.innerHTML = value;
+                        }
+                    },
+                    get: function() {
+                        return this._text;
+                    }
+                });
 
             this.x = (args && args.x) ? args.x : 0;
             this.y = (args && args.y) ? args.y : 0;
             this.w = (args && args.w) ? args.w : 0;
             this.h = (args && args.h) ? args.h : 0;
-
-            this.setStyles({
-                background: 'blue',
-                position: 'absolute',
-                border: '1px solid #FFFFFF',
-                color: '#FFFFFF'
-            });
 
             return this;
         },
