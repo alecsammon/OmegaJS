@@ -2,6 +2,14 @@ define(['omegaCore', 'md5'], function(o, h) {
 
     'use strict';
     return {
+
+        create: function(depends, args) {
+            return new (this.extends({
+                          init:function(){
+                              this.depends.apply(this, depends);
+                          }}))(args);
+        },
+
         extends: function(e) {
             var entityType = function () {};
             
