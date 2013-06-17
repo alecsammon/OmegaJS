@@ -16,8 +16,6 @@ define(['omega/entity', 'entity/dom', 'omegaCore'], function(e, dom, o) {
                 self.trigger(action, event);
             }
 
-
-            o.bind('MouseUp', function(){ self.stopDrag(); }, this);
             this.elem.onclick = function(e) { trigger('Click', e); }; 
             this.elem.onmousedown = function(e) { trigger('MouseDown', e); self.startDrag() };
             this.elem.onmouseup = function(e) { trigger('MouseUp', e); };
@@ -27,9 +25,9 @@ define(['omega/entity', 'entity/dom', 'omegaCore'], function(e, dom, o) {
         },
  
         startDrag: function() {
-            var self = this;
             this.trigger('StartDrag');
-            o.bind('MouseMove', function(e){ self.trigger('Dragging', e); }, this);
+            o.bind('MouseMove', function(e){ this.trigger('Dragging', e); }, this);
+            o.bind('MouseUp', function(){ this.stopDrag(); }, this);
         },
 
         stopDrag: function() {

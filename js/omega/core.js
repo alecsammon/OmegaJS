@@ -48,9 +48,9 @@ define([
                 };
 
             stage.elem.onclick = function(e) { triggerMouse('Click', e); };
-            stage.elem.onmousedown = function(e) { trigger('MouseDown', e); };
-            stage.elem.onmouseup = function(e) { trigger('MouseUp', e); };
-            stage.elem.onmousemove = function(e) { trigger('MouseMove', e); };
+            stage.elem.onmousedown = function(e) { triggerMouse('MouseDown', e); };
+            stage.elem.onmouseup = function(e) { triggerMouse('MouseUp', e); };
+            stage.elem.onmousemove = function(e) { triggerMouse('MouseMove', e); };
         },
 
         register = function(entity) {
@@ -59,13 +59,10 @@ define([
         },
 
         trigger = function(action, args) {
-if (binds[action]) {
+            if (binds[action]) {
                 for(var i in binds[action]) {
                     for(var j = 0; j<binds[action][i].length; ++j) {
-                           binds[action][i][j].call(
-                               binds[action][i],
-                               args
-                           );
+                           binds[action][i][j].call.call(binds[action][i][j].context, args);
                     }
                 }
             }
@@ -77,16 +74,17 @@ if (binds[action]) {
                 if (!binds[action]) {
                     binds[action] = {};
                 }
-                if(!binds[action][context]) {
-                    binds[action][context] = [];
+                if(!binds[action][context.uuid]) {
+                    binds[action][context.uuid] = [];
                 }
 
-                binds[action][context].push(call);
+                binds[action][context.uuid].push({call:call, context:context});
+
 
         },
 
         unbind = function(action, context) {
-            delete binds[action][context];
+            delete binds[action][context.uuid];
         },
 
         getScaling = function(width, height) {
