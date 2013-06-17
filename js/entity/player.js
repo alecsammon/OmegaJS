@@ -21,6 +21,10 @@ define(['omega/entity', 'omegaCore', 'entity/dom', 'entity/click'], function(e, 
                 .bind('EnterFrame', function(fps) {
                     this.text = 'FPS:' + fps + "<br />UUID:" + this.uuid;
                     this.move();
+                })
+                .bind('Dragging', function(e) {
+                    this.x = e.newX;
+                    this.y = e.newY;
                 });
         },
 
