@@ -9,7 +9,6 @@ MD5 - http://pajhome.org.uk/crypt/md5/
 - components
  - wind
  - gravity
- - mouse
  - keyboard
  - collision
 

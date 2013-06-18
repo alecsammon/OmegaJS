@@ -11,18 +11,18 @@ require(['js/require.config.js'], function (js) {
       o.init(document.getElementById('omegajs'), 800, 600); 
 
       // new object
-      var p1 = new player({x:0, w:150, h:150});
+      var a = new player({x:0, w:150, h:150});
 
       // another new object
-      var p2 = new player2({x:10, w:100, h:100});
+      //var b = new player2({x:10, w:100, h:100}, null, true);
    
       // quick setup
-      var a = e.create([player], {x: 20, w:50, h:50});
-      a.setStyle('backgroundColor', 'red');
+      //var c = e.create([player], {x: 20, w:50, h:50});
+      //c.setStyle('backgroundColor', 'red');
 
       // long!
-      var x = new (e.extends({init:function(){ this.depends(player); }}))({x:20, w:50, h:50});
-      x.setStyle('backgroundColor', 'yellow');
+      //var d = new (e.extends({init:function(){ this.depends(player); }}))({x:20, w:50, h:50});
+      //d.setStyle('backgroundColor', 'yellow');
   });
   
 });

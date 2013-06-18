@@ -10,6 +10,9 @@ define([
         attr = {width: 0, height: 0},
         entities = [],
         binds = {},
+        shiftKey = false,
+        ctrlKey = false,
+        altKey = false,
 
         init = function(container, width, height) {
                 var scale = getScaling(width, height);
@@ -34,7 +37,8 @@ define([
                 attr.left = stage.elem.parentNode.offsetLeft;
                 attr.top = stage.elem.parentNode.offsetTop;
 
-                initMouse();                
+                initMouse();            
+                initKeys();    
                 //stage.lock();
                 pulse.bind(function(args){ trigger('EnterFrame', args); }).start();
             },
@@ -53,6 +57,18 @@ define([
             stage.elem.onmousemove = function(e) { triggerMouse('MouseMove', e); };
         },
 
+        initKeys = function() {
+            var triggerKey = function(action, e) {
+                    trigger(action, {
+                        keyCode:e.keyCode,
+                        shiftKey: e.shiftKey,
+                        ctrlKey: e.ctrlKey,
+                        altKey: e.altKey
+                    });
+            };
+            document.onkeydown = function(e) { triggerKey('KeyDown', e); };
+        },
+
         register = function(entity) {
             entities.push(entity);
             return entities.length;
@@ -69,18 +85,15 @@ define([
         },
 
 
-        bind = function(action, call, context) {
+        bind = function(action, call, context) {   
+            if (!binds[action]) {
+                binds[action] = {};
+            }
+            if(!binds[action][context.uuid]) {
+                binds[action][context.uuid] = [];
+            }
 
-                if (!binds[action]) {
-                    binds[action] = {};
-                }
-                if(!binds[action][context.uuid]) {
-                    binds[action][context.uuid] = [];
-                }
-
-                binds[action][context.uuid].push({call:call, context:context});
-
-
+            binds[action][context.uuid].push({call:call, context:context});
         },
 
         unbind = function(action, context) {

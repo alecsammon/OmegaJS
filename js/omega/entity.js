@@ -2,6 +2,7 @@ define(['omegaCore', 'md5'], function(o, h) {
 
     'use strict';
     return {
+        initArgs: [],
 
         create: function(depends, args) {
             return new (this.extends({
@@ -33,9 +34,17 @@ define(['omegaCore', 'md5'], function(o, h) {
                 }
             }
 
-            var returnE = function(args, init) {
+            var init = true;
+            
+
+            var returnE = function() {
                 if(!(this instanceof returnE)){
-                    return new returnE(args, false);
+                    init = false;
+                     var entity = function(args) {
+                         return returnE.apply(this, args);
+                     }
+                     entity.prototype = returnE.prototype;
+                     return new entity(arguments);
                 }
 
                 var entity = new entityType();
@@ -45,14 +54,14 @@ define(['omegaCore', 'md5'], function(o, h) {
                         entity[key] = e[key];
                     }
                 }
-
-                entity.initArgs = args;
+                            
                 entity.extendsList = [];
                 entity.binds = {};
-                entity.hash = this.hash;
+                entity.hash = this.hash;   
+                entity.initArgs = arguments;     
 
                 if (init !== false && typeof entity.init === 'function') {
-                    entity.init(args);           
+                    entity.init.apply(entity, arguments);   
                     entity.uuid = o.register(entity);
                     o.bind('EnterFrame', function(args){ entity.trigger('EnterFrame', args); }, entity);
                  }
@@ -70,7 +79,7 @@ define(['omegaCore', 'md5'], function(o, h) {
             return returnE;
         },
 
-        depends: function() {
+        depends: function() {                           
             for (var i = 0; i < arguments.length; i++) {
                 if(typeof arguments[i] === 'function') {
                     var objHash = arguments[i].prototype.hash;;
@@ -87,26 +96,28 @@ define(['omegaCore', 'md5'], function(o, h) {
                 }
                 if(!alreadyInitialised) {
                    if(typeof arguments[i] === 'function') {
-                        var newE = new arguments[i](null, false);
+                        var newE = arguments[i]()
                         var args = this.initArgs;
                     } else {
                         var newE = arguments[i];
                         var args = newE.initArgs;
                     }
- 
+     
                     this.extendsList.push(objHash);
                     for(var key in newE) {
-                        if(key !== 'extendsList') {
+                        if(key !== 'extendsList' && key !== 'initArgs' && key !== 'binds') {
                             this[key] = newE[key];
                         }
                     }
-                    this.init(args);
+                    
+                    this.init.apply(this, args);
                }
             }
+            
             return this;    
         },
 
-        trigger: function(action, args, context) {
+        trigger: function(action, args, context) {    
             if(typeof context === 'undefined') {
                 context = this;
             }
