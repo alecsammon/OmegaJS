@@ -2,7 +2,7 @@ define(['omega/entity', 'omegaCore', 'entity/dom', 'entity/mouse', 'entity/keybo
 
     'use strict';
 
-    return e.extends({
+    return e.extend({
         _left: true,
         _up: true,
 

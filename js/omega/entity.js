@@ -5,13 +5,13 @@ define(['omegaCore', 'md5'], function(o, h) {
         initArgs: [],
 
         create: function(depends, args) {
-            return new (this.extends({
+            return new (this.extend({
                           init:function(){
                               this.depends.apply(this, depends);
                           }}))(args);
         },
 
-        extends: function(e) {
+        extend: function(e) {
             var entityType = function () {};
             
             for (var key in e) {
@@ -29,7 +29,7 @@ define(['omegaCore', 'md5'], function(o, h) {
                     throw 'Trying to overwrite '+key
                 }
 
-                if(typeof this[key] === 'function' && key !== 'extends') {
+                if(typeof this[key] === 'function' && key !== 'extend') {
                     entityType.prototype[key] = this[key];
                 }
             }
@@ -55,7 +55,7 @@ define(['omegaCore', 'md5'], function(o, h) {
                     }
                 }
                             
-                entity.extendsList = [];
+                entity.extendList = [];
                 entity.binds = {};
                 entity.hash = this.hash;   
                 entity.initArgs = arguments;     
@@ -89,8 +89,8 @@ define(['omegaCore', 'md5'], function(o, h) {
 
                 var alreadyInitialised = false;
 
-                for (var j = 0; j < this.extendsList.length; j++) {
-                    if (this.extendsList[j] === objHash) {
+                for (var j = 0; j < this.extendList.length; j++) {
+                    if (this.extendList[j] === objHash) {
                         alreadyInitialised = true;
                     }
                 }
@@ -103,9 +103,9 @@ define(['omegaCore', 'md5'], function(o, h) {
                         var args = newE.initArgs;
                     }
      
-                    this.extendsList.push(objHash);
+                    this.extendList.push(objHash);
                     for(var key in newE) {
-                        if(key !== 'extendsList' && key !== 'initArgs' && key !== 'binds') {
+                        if(key !== 'extendList' && key !== 'initArgs' && key !== 'binds') {
                             this[key] = newE[key];
                         }
                     }

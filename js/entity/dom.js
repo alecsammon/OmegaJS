@@ -1,21 +1,21 @@
-define(['omega/entity', 'omegaCore'], function(e, o) {
+define(['omega/entity', 'omegaCore'], function (e, o) {
 
     'use strict';
 
-    return e.extends({        
+    return e.extend({ 
         elem: null,
                 
-        init: function(args) {
+        init: function (args) {
             this.elem = document.createElement('div');
             o.addElemToStage(this.elem);
 
-            var watchAttr = function(propName, style) {
+            var watchAttr = function (propName, style) {
                 Object.defineProperty(this, propName, {
-                    set: function(value) {
+                    set: function (value) {
                         this['_'+propName]= value;
                         this.setStyle(style, value+'px');
                     },
-                    get: function() {
+                    get: function () {
                         return this['_'+propName];
                     }
                 });
@@ -26,13 +26,13 @@ define(['omega/entity', 'omegaCore'], function(e, o) {
             watchAttr.call(this, 'w', 'width');
             watchAttr.call(this, 'h', 'height');
             Object.defineProperty(this, 'text', {
-                    set: function(value) {
+                    set: function (value) {
                         if(this._text !== value) {
                            this._text =  value;
                            this.elem.innerHTML = value;
                         }
                     },
-                    get: function() {
+                    get: function () {
                         return this._text;
                     }
                 });

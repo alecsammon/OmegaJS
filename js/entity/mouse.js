@@ -2,7 +2,7 @@ define(['omega/entity', 'entity/dom', 'omegaCore'], function(e, dom, o) {
 
     'use strict';
 
-    return e.extends({
+    return e.extend({
         init: function() {
             this.depends(dom);
 
