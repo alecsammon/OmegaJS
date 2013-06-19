@@ -1,151 +1,148 @@
 define([
-    'omega/device',
-    'omega/obj',
-    'omega/pulse'
-], function(device, obj, pulse) {
+  'omega/device',
+  'omega/obj',
+  'omega/pulse'
+], function (device, Obj, pulse) {
 
-    'use strict';
-    
-    var stage = new obj(document.createElement('div')),
-        attr = {width: 0, height: 0},
-        entities = [],
-        binds = {},
-        shiftKey = false,
-        ctrlKey = false,
-        altKey = false,
+  'use strict';
 
-        init = function(container, width, height) {
-                var scale = getScaling(width, height);
-                attr = {width: width * scale, height: height * scale};
+  var stage = new Obj(document.createElement('div')),
+    attr = {width: 0, height: 0},
+    entities = [],
+    binds = {},
 
-                (new obj(container))
-                    .appendChild(stage.elem)
-                    .setStyles({
-                        width: width * scale + 'px',
-                        height: height * scale + 'px',
-                        position: 'relative',
-                        overflow: 'hidden'
-                    });
+    init = function (container, width, height) {
+        var scale = getScaling(width, height);
+        attr = {width: width * scale, height: height * scale};
 
-                stage.setStyles({
-                    transformOrigin: '0 0',
-                    transform: 'scale(' + scale + ')',
-                    width: width + 'px',
-                    height: height + 'px',
-                });
+        (new Obj(container))
+          .appendChild(stage.elem)
+          .setStyles({
+            width: width * scale + 'px',
+            height: height * scale + 'px',
+            position: 'relative',
+            overflow: 'hidden'
+          });
 
-                attr.left = stage.elem.parentNode.offsetLeft;
-                attr.top = stage.elem.parentNode.offsetTop;
+        stage.setStyles({
+          transformOrigin: '0 0',
+          transform: 'scale(' + scale + ')',
+          width: width + 'px',
+          height: height + 'px'
+        });
 
-                initMouse();            
-                initKeys();    
-                //stage.lock();
-                pulse.bind(function(args){ trigger('EnterFrame', args); }).start();
-            },
+        attr.left = stage.elem.parentNode.offsetLeft;
+        attr.top = stage.elem.parentNode.offsetTop;
 
-        initMouse = function() {
-            var triggerMouse = function(action, e) {
-                    trigger(action, {
-                        x: e.x-attr.left,
-                        y: attr.height-e.y-attr.top
-                    });
-                };
+        initMouse();
+        initKeys();
+        //stage.lock();
+        pulse.bind(function (args) { trigger('EnterFrame', args); }).start();
+      },
 
-            stage.elem.onclick = function(e) { triggerMouse('Click', e); };
-            stage.elem.onmousedown = function(e) { triggerMouse('MouseDown', e); };
-            stage.elem.onmouseup = function(e) { triggerMouse('MouseUp', e); };
-            stage.elem.onmousemove = function(e) { triggerMouse('MouseMove', e); };
-        },
+    initMouse = function () {
+      var triggerMouse = function (action, e) {
+          trigger(action, {
+            x: e.x - attr.left,
+            y: attr.height - e.y - attr.top
+          });
+        };
 
-        initKeys = function() {
-            var triggerKey = function(action, e) {
-                    trigger(action, {
-                        keyCode:e.keyCode,
-                        shiftKey: e.shiftKey,
-                        ctrlKey: e.ctrlKey,
-                        altKey: e.altKey
-                    });
-            };
-            document.onkeydown = function(e) { triggerKey('KeyDown', e); };
-        },
+      stage.elem.onclick = function (e) { triggerMouse('Click', e); };
+      stage.elem.onmousedown = function (e) { triggerMouse('MouseDown', e); };
+      stage.elem.onmouseup = function (e) { triggerMouse('MouseUp', e); };
+      stage.elem.onmousemove = function (e) { triggerMouse('MouseMove', e); };
+    },
 
-        register = function(entity) {
-            entities.push(entity);
-            return entities.length;
-        },
+    initKeys = function () {
+      var triggerKey = function (action, e) {
+          trigger(action, {
+            keyCode: e.keyCode,
+            shiftKey: e.shiftKey,
+            ctrlKey: e.ctrlKey,
+            altKey: e.altKey
+          });
+        };
+      document.onkeydown = function (e) { triggerKey('KeyDown', e); };
+    },
 
-        trigger = function(action, args) {
-            if (binds[action]) {
-                for(var i in binds[action]) {
-                    for(var j = 0; j<binds[action][i].length; ++j) {
-                           binds[action][i][j].call.call(binds[action][i][j].context, args);
-                    }
-                }
-            }
-        },
+    register = function (entity) {
+      entities.push(entity);
+      return entities.length;
+    },
 
-
-        bind = function(action, call, context) {   
-            if (!binds[action]) {
-                binds[action] = {};
-            }
-            if(!binds[action][context.uuid]) {
-                binds[action][context.uuid] = [];
-            }
-
-            binds[action][context.uuid].push({call:call, context:context});
-        },
-
-        unbind = function(action, context) {
-            delete binds[action][context.uuid];
-        },
-
-        getScaling = function(width, height) {
-            var scale = Math.min(
-                    window.innerWidth / (width + 2),
-                    window.innerHeight / (height + 2)
-                    );
-
-            if (!device.isTouchDevice()) {
-                scale = Math.min(scale, 1);
-            }
-
-            return scale;
+    trigger = function (action, args) {
+      if (binds[action]) {
+        for (var i in binds[action]) {
+          for (var j = 0; j < binds[action][i].length; ++j) {
+            binds[action][i][j].call.call(binds[action][i][j].context, args);
+          }
         }
+      }
+    },
 
-    return {
 
-        init: function(container, width, height) {
-            init(container, width, height);
-            return this;
-        },
+    bind = function (action, call, context) {
+      if (!binds[action]) {
+        binds[action] = {};
+      }
+      if (!binds[action][context.uuid]) {
+        binds[action][context.uuid] = [];
+      }
 
-        register: function(entity) {
-            return register(entity);
-        },
+      binds[action][context.uuid].push({call: call, context: context});
+    },
 
-        addElemToStage: function(elem) {
-            stage.appendChild(elem);
-        },
+    unbind = function (action, context) {
+      delete binds[action][context.uuid];
+    },
 
-        getAttr: function() { 
-            return attr;
-        },
- 
-        trigger: function(action, args) {
-           trigger(action, args);
-           return this;
-        },
+    getScaling = function (width, height) {
+      var scale = Math.min(
+          window.innerWidth / (width + 2),
+          window.innerHeight / (height + 2)
+          );
 
-        bind: function(action, call, context) {
-           bind(action, call, context);
-           return this;
-        },
+      if (!device.isTouchDevice()) {
+        scale = Math.min(scale, 1);
+      }
 
-        unbind: function(action, context) {
-           unbind(action, context);
-           return this;
-        }
-     
+      return scale;
     };
+
+  return {
+
+    init: function (container, width, height) {
+      init(container, width, height);
+      return this;
+    },
+
+    register: function (entity) {
+      return register(entity);
+    },
+
+    addElemToStage: function (elem) {
+      stage.appendChild(elem);
+    },
+
+    getAttr: function () {
+      return attr;
+    },
+
+    trigger: function (action, args) {
+      trigger(action, args);
+      return this;
+    },
+
+    bind: function (action, call, context) {
+      bind(action, call, context);
+      return this;
+    },
+
+    unbind: function (action, context) {
+      unbind(action, context);
+      return this;
+    }
+
+  };
 });
