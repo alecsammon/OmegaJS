@@ -3,48 +3,50 @@ define(['omega/performance'], function (performance) {
   'use strict';
 
   var targetFps = 30,
-          frameDurations = [],
-          framestart = performance.now(),
-          binds = [],
-          actualFps = 0,
-          bind = function (call, context) {
-    binds[binds.length] = {call: call, context: context};
-  },
-          pulse = function () {
-    var tweak;
+      frameDurations = [],
+      framestart = performance.now(),
+      binds = [],
+      actualFps = 0,
+      
+      bind = function (call, context) {
+        binds[binds.length] = {call: call, context: context};
+      },
 
-    frameDurations[frameDurations.length] = performance.now() - framestart;
+      pulse = function () {
+        var tweak;
 
-    if (frameDurations.length > 20) {
-      frameDurations.shift();
-    }
+        frameDurations[frameDurations.length] = performance.now() - framestart;
 
-    var sum = 0;
-    for (var i = 0, il = frameDurations.length; i < il; i++) {
-      sum += frameDurations[i];
-    }
+        if (frameDurations.length > 20) {
+          frameDurations.shift();
+        }
 
-    var avg = sum / frameDurations.length;
+        var sum = 0;
+        for (var i = 0, il = frameDurations.length; i < il; i++) {
+          sum += frameDurations[i];
+        }
 
-    if (avg > 1000 / targetFps) {
-      tweak = -Math.min(Math.ceil(avg - 1000 / targetFps), 10);
-    } else {
-      tweak = Math.min(Math.ceil(1000 / targetFps - avg), 10);
-    }
+        var avg = sum / frameDurations.length;
 
-    actualFps = Math.round(1000 / avg);
+        if (avg > 1000 / targetFps) {
+          tweak = -Math.min(Math.ceil(avg - 1000 / targetFps), 10);
+        } else {
+          tweak = Math.min(Math.ceil(1000 / targetFps - avg), 10);
+        }
 
-    setTimeout(function () {
-      for (var i = 0, il = binds.length; i < il; i++) {
-        binds[i].call.call(binds[i].context, actualFps);
-      }
+        actualFps = Math.round(1000 / avg);
 
-      pulse();
+        setTimeout(function () {
+          for (var i = 0, il = binds.length; i < il; i++) {
+            binds[i].call.call(binds[i].context, actualFps);
+          }
 
-    }, (1000 / targetFps) + tweak);
+          pulse();
 
-    framestart = performance.now();
-  };
+        }, (1000 / targetFps) + tweak);
+
+        framestart = performance.now();
+      };
 
   return {
     start: function () {

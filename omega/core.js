@@ -20,7 +20,8 @@ define([
                 .appendChild(stage.elem)
                 .setStyles({
           width: width * attr.scale + 'px',
-          height: height * attr.scale + 'px'
+          height: height * attr.scale + 'px',
+          display: 'block'
         });
 
         stage.setStyles({

@@ -10,7 +10,7 @@ require(['boxy/require.config.js'], function () {
     o.init(document.getElementById('omegajs'), 800, 600);
 
     // new object
-    //new Box({x: 0, w: 150, h: 150}, 'red');
+    new Box({x: 0, w: 150, h: 150}, 'red');
 
     // another new object
     new Box2();
@@ -23,9 +23,9 @@ require(['boxy/require.config.js'], function () {
     //setTimeout(function() { o.endScene();}, 5000);
 
     // long!
-    //var d = new (e.extend({init: function () {
-    //    this.depends(Box);
-    //  }}))({x: 20, w: 50, h: 50});
-    //d.setStyle('backgroundColor', 'yellow');
+    var d = new (e.extend({init: function () {
+        this.depends(Box);
+      }}))({x: 20, w: 50, h: 50});
+    d.setStyle('backgroundColor', 'yellow');
   });
 });
