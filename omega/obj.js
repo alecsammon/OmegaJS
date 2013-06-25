@@ -42,5 +42,10 @@ define(['omega/device'], function (device) {
       this.elem.appendChild(child);
       return this;
     };
+
+    this.removeChild = function (child) {
+      this.elem.removeChild(child);
+      return this;
+    };
   };
 });

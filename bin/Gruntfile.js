@@ -10,9 +10,9 @@ module.exports = function (grunt) {
       },
       core: [
         'Gruntfile.js',
-        'js/*.js',
-        'js/entity/*.js',
-        'js/omega/*.js'
+        '../boxy/**.js',
+        '../omega/entity/*.js',
+        '../omega/*.js'
       ]
     }
   });
