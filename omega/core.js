@@ -72,8 +72,13 @@ define([
             altKey: e.altKey
           });
         };
+        
+
         document.onkeydown = function (e) {
           triggerKey('KeyDown', e);
+        };
+        document.onkeyup = function (e) {
+          triggerKey('KeyUp', e);
         };
       },
 

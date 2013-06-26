@@ -6,47 +6,53 @@ define(['omega/core', 'omega/entity', 'omega/entity/dom', 'omega/entity/mouse', 
     _left: true,
     _up: true,
     _freeze: false,
-    init: function (args, color) {
+    init: function (args, color) {      
+      var colors = ['blue', 'red', 'green', 'yellow'];
+      
       this.depends(dom, mouse, keyboard, text)
-              .setStyles({
+      .setStyles({
         border: '1px solid #FFFFFF',
         color: '#FFFFFF'
       })
-              .bind('Click', function () {
+      .bind('Click', function () {
         this._left = !this._left;
         this._up = !this._up;
       })
-              .bind('EnterFrame', function (fps) {
+      .bind('EnterFrame', function (fps) {
         this.content = 'FPS:' + fps + '<br />UUID:' + this.uuid;
-        this.move();
+        
+        if(this.isKeyDown(37)) {
+            this.nudge(-2, 0);          
+        }
+        
+        if(this.isKeyDown(38)) {
+            this.nudge(0, 2);          
+        }
+        
+        if(this.isKeyDown(39)) {
+            this.nudge(2, 0);          
+        }
+        
+        if(this.isKeyDown(40)) {
+            this.nudge(0, -2);          
+        }   
+        
+        if(this.isKeyDown(17)) {
+          this.setStyle('backgroundColor', colors[Math.round(Math.random() * colors.length)]);
+        }
+        //this.move();
       })
-              .bind('MouseDown', function () {
+      .bind('MouseDown', function () {
         this._freeze = true;
       })
-              .bind('MouseUp', function () {
+      .bind('MouseUp', function () {
         this._freeze = false;
       })
-              .bind('Dragging', function (e) {
+      .bind('Dragging', function (e) {
         this.x = e.newX;
         this.y = e.newY;
       })
-              .bind('KeyDown', function (e) {
-        switch (e.keyCode) {
-          case 37:
-            this.nudge(-10, 0);
-            break;
-          case 38:
-            this.nudge(0, 10);
-            break;
-          case 39:
-            this.nudge(10, 0);
-            break;
-          case 40:
-            this.nudge(0, -10);
-            break;
-        }
-      })
-              .boundStage();
+      .boundStage();
 
       if (color) {
         this.setStyle('backgroundColor', color);
