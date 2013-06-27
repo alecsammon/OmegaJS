@@ -8,9 +8,11 @@ define([
           'use strict';
 
           var Box2 = e.extend({
+            name: 'Box2',
+            
             init: function (color) {
-              var dom = Dom({x: 300, w: 100, h: 100});
-              this.depends(dom, Box({}, color || 'green'));
+              var dom = Dom(300, 0, 100, 100);
+              this.depends(dom, Box({}, color));
 
               this.bind('Click', function () {
                 new Box2('orange');

@@ -2,7 +2,7 @@ define(['omega/performance'], function (performance) {
 
   'use strict';
 
-  var targetFps = 30,
+  var targetFps = 60,
       frameDurations = [],
       framestart = performance.now(),
       binds = [],

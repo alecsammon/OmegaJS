@@ -53,12 +53,11 @@ define(['omega/core', 'omega/lib/md5'], function (o, h) {
       return new EntityConstructor(args);
     },
 
-    extend: function (e) {
-      var EntityType = function () {
-      },
-              key,
-              init = true,
-              returnE;
+    extend: function (e) {        
+      var EntityType = function () {},
+          key,
+          init = true,
+          returnE;
 
       for (key in e) {
         if (EntityType.prototype[key]) {
@@ -94,7 +93,7 @@ define(['omega/core', 'omega/lib/md5'], function (o, h) {
           EntityConstructor.prototype = returnE.prototype;
           return new EntityConstructor(arguments);
         }
-
+        
         var entity = new EntityType();
 
         for (var key in e) {
@@ -106,11 +105,41 @@ define(['omega/core', 'omega/lib/md5'], function (o, h) {
         entity.extendList = [];
         entity.binds = {};
         entity.hash = this.hash;
-        entity.initArgs = arguments;
+        
+        var args = [];
+        var ignore = true;
+        if(init === false && typeof arguments[0] === 'object') {
+           for (var i in arguments) {
+            if(ignore) {
+              ignore = false;
+            } else {
+              args[args.length] = arguments[i];
+            }
+          }
+        } else {
+          args = arguments;
+        }
+          
+        entity.initArgs = args;
 
         if (init !== false && typeof entity.init === 'function') {
-          o.register(entity);
-          entity.init.apply(entity, arguments);
+          o.register(entity);                        
+
+          var args = [];
+          var ignore = true;
+          if(typeof arguments[0] === 'object') {
+             for (var i in arguments) {
+              if(ignore) {
+                ignore = false;
+              } else {
+                args[args.length] = arguments[i];
+              }
+            }
+          } else {
+            args = arguments;
+          }
+                              
+          entity.init.apply(entity, args);
           o.bind('EnterFrame', function (args) {
             entity.trigger('EnterFrame', args);
           }, entity);
@@ -184,9 +213,9 @@ define(['omega/core', 'omega/lib/md5'], function (o, h) {
 
       if (typeof on === 'function') {
         newE = on();
-        args = (this.initArgs) ? this.initArgs : {};
+        args = (this.initArgs && this.initArgs[0] && this.initArgs[0][newE.name]) ? this.initArgs[0][newE.name] : [];
       } else {
-        newE = on;
+        newE = on;        
         args = newE.initArgs;
       }
 
@@ -255,7 +284,7 @@ define(['omega/core', 'omega/lib/md5'], function (o, h) {
      */
     destroy: function () {
       this.binds = {};
-
+      
       for (var i = 0, il = this.destroyList.length; i < il; ++i) {
         this.destroyList[i].call(this);
       }

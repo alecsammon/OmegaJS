@@ -1,0 +1,47 @@
+body {
+    padding: 0;
+    margin: 0;
+    background: #000000;
+} 
+
+#omegajs {
+    border: 1px solid #FFFFFF;
+    margin: 0 auto;
+    background-color: #024994;
+}
+
+@media screen and (min-height:700px) {
+   #omegajs {
+    margin: 20px auto;
+   }
+}
+
+.player,
+.player.anim_0 {
+    background-image: url(img/shooter/1945.png);
+    background-position: -6px -412px;
+}
+
+.player.anim_1 {
+    background-position: -72px -412px;
+}
+
+.player.anim_2 {
+    background-position: -138px -412px;
+}
+
+.player.horz {
+    transform: scale(0.8, 1);
+    -ms-transform: scale(0.8, 1); 
+    -webkit-transform: scale(0.8, 1);  
+}
+
+.enemy {
+    background-image: url(img/shooter/1945.png);
+    background-position: -6px -466px;    
+}
+
+.bullet {
+    background-image: url(img/shooter/1945.png);
+    background-position: -11px -211px;
+}

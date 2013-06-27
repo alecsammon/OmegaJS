@@ -3,6 +3,8 @@ define(['omega/entity', 'omega/core'], function (e, o) {
   'use strict';
 
   return e.extend({
+    name: 'keyboard',
+    
     keyboard: {keys: {}},
 
     init: function () {

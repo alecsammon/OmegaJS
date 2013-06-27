@@ -3,6 +3,8 @@ define(['omega/entity', 'omega/core', 'omega/device'], function (e, o, device) {
   'use strict';
 
   return e.extend({
+    name: 'dom',
+    
     /**
      * this.x
      *
@@ -78,7 +80,7 @@ define(['omega/entity', 'omega/core', 'omega/device'], function (e, o, device) {
      *
      * @returns this
      */
-    init: function (args) {
+    init: function (x, y, w, h) {
       this.elem = document.createElement('div');
       o.addElemToStage(this.elem);
       var dom = {};
@@ -114,10 +116,10 @@ define(['omega/entity', 'omega/core', 'omega/device'], function (e, o, device) {
       watchAttr.call(this, 'w', 'width');
       watchAttr.call(this, 'h', 'height');
 
-      this.w = args && args.w ? args.w : 0;
-      this.h = args && args.h ? args.h : 0;
-      this.x = args && args.x ? args.x : 0;
-      this.y = args && args.y ? args.y : 0;
+      this.w = w ? w : 0;
+      this.h = h ? h : 0;
+      this.x = x ? x : 0;
+      this.y = y ? y : 0;
 
       return this;
     },
@@ -169,6 +171,16 @@ define(['omega/entity', 'omega/core', 'omega/device'], function (e, o, device) {
       for (var key in styles) {
         this.setStyle(key, styles[key]);
       }
+      return this;
+    },
+            
+    addClass: function (className) {
+      this.elem.classList.add(className);      
+      return this;
+    },
+            
+    removeClass: function (className) {
+      this.elem.classList.remove(className);
       return this;
     },
 

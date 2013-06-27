@@ -3,6 +3,8 @@ define(['omega/entity', 'omega/entity/dom', 'omega/core'], function (e, dom, o) 
   'use strict';
 
   return e.extend({
+    name: 'mouse',
+        
     init: function () {
       this.depends(dom);
 

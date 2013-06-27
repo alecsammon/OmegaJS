@@ -1,15 +1,26 @@
-define(['omega/core', 'omega/entity', 'omega/entity/dom', 'omega/entity/mouse', 'omega/entity/keyboard', 'omega/entity/text'], function (o, e, dom, mouse, keyboard, text) {
+define([
+  'omega/core', 
+  'omega/entity', 
+  'omega/entity/dom', 
+  'omega/entity/mouse', 
+  'omega/entity/keyboard',
+  'omega/entity/text',
+  'omega/entity/fourway'
+], function (o, e, dom, mouse, keyboard, text, fourway) {
 
   'use strict';
 
   return e.extend({
+    name: 'Box',
+            
     _left: true,
     _up: true,
     _freeze: false,
-    init: function (args, color) {      
+    
+    init: function (color) {   
       var colors = ['blue', 'red', 'green', 'yellow'];
       
-      this.depends(dom, mouse, keyboard, text)
+      this.depends(dom, mouse, keyboard, text, fourway)
       .setStyles({
         border: '1px solid #FFFFFF',
         color: '#FFFFFF'
@@ -20,27 +31,12 @@ define(['omega/core', 'omega/entity', 'omega/entity/dom', 'omega/entity/mouse', 
       })
       .bind('EnterFrame', function (fps) {
         this.content = 'FPS:' + fps + '<br />UUID:' + this.uuid;
-        
-        if(this.isKeyDown(37)) {
-            this.nudge(-2, 0);          
-        }
-        
-        if(this.isKeyDown(38)) {
-            this.nudge(0, 2);          
-        }
-        
-        if(this.isKeyDown(39)) {
-            this.nudge(2, 0);          
-        }
-        
-        if(this.isKeyDown(40)) {
-            this.nudge(0, -2);          
-        }   
-        
+                
         if(this.isKeyDown(17)) {
           this.setStyle('backgroundColor', colors[Math.round(Math.random() * colors.length)]);
         }
-        //this.move();
+        
+        this.move();
       })
       .bind('MouseDown', function () {
         this._freeze = true;
