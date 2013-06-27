@@ -77,12 +77,13 @@ define(['omega/core', 'omega/lib/md5'], function (o, h) {
         if (typeof this[key] === 'function' && key !== 'extend') {
           EntityType.prototype[key] = this[key];
         }
-      }
+      }     
 
+      EntityType.prototype.destroyList = this.destroyList || [];
+      
       if (e.destroy) {
-        EntityType.prototype.destroyList = EntityType.prototype.destroyList || [];
         EntityType.prototype.destroyList[EntityType.prototype.destroyList.length] = e.destroy;
-      }
+      }      
 
       returnE = function () {
         if (!(this instanceof returnE)) {
@@ -97,14 +98,14 @@ define(['omega/core', 'omega/lib/md5'], function (o, h) {
         var entity = new EntityType();
 
         for (var key in e) {
-          if (typeof e[key] !== 'function') {
+          if (typeof e[key] !== 'function' && key !== 'destroy') {
             entity[key] = e[key];
           }
         }
 
         entity.extendList = [];
         entity.binds = {};
-        entity.hash = this.hash;
+        entity.hash = this.hash;   
         
         var args = [];
         var ignore = true;
@@ -120,7 +121,7 @@ define(['omega/core', 'omega/lib/md5'], function (o, h) {
           args = arguments;
         }
           
-        entity.initArgs = args;
+        entity.initArgs = args;       
 
         if (init !== false && typeof entity.init === 'function') {
           o.register(entity);                        
@@ -138,9 +139,10 @@ define(['omega/core', 'omega/lib/md5'], function (o, h) {
           } else {
             args = arguments;
           }
-                              
+        
           entity.init.apply(entity, args);
           o.bind('EnterFrame', function (args) {
+            entity.trigger('LeaveFrame', args);
             entity.trigger('EnterFrame', args);
           }, entity);
         }
@@ -186,7 +188,7 @@ define(['omega/core', 'omega/lib/md5'], function (o, h) {
       var objHash,
               args,
               newE,
-              ignoredProperties = ['extendList', 'initArgs', 'binds'];
+              ignoredProperties = ['extendList', 'initArgs', 'binds', 'destroyList'];
 
       if (typeof on === 'function') {
         objHash = on.prototype.hash;
@@ -218,7 +220,7 @@ define(['omega/core', 'omega/lib/md5'], function (o, h) {
         newE = on;        
         args = newE.initArgs;
       }
-
+      
       // attach all the propeties
       for (var key in newE) {
         if (ignoredProperties.indexOf(key) === -1) {
@@ -237,8 +239,10 @@ define(['omega/core', 'omega/lib/md5'], function (o, h) {
 
     trigger: function (action, args) {
       if (this.binds[action] && this.binds[action].unnamed) {
-        for (var i in this.binds[action].unnamed) {
-          this.binds[action].unnamed[i].call(this, args);
+        for (var i in this.binds[action].unnamed) {   
+          if(this.binds[action] && this.binds[action].unnamed) {
+            this.binds[action].unnamed[i].call(this, args);
+          }
         }
       }
 
@@ -266,10 +270,12 @@ define(['omega/core', 'omega/lib/md5'], function (o, h) {
     },
 
     unbind: function (action, name) {
-      if (name) {
-        delete this.binds[action].named[name];
-      } else {
-        delete this.binds[action].unnamed;
+      if(this.binds[action]) {
+        if (name) {
+          delete this.binds[action].named[name];
+        } else {
+          delete this.binds[action].unnamed;
+        }
       }
 
       return this;

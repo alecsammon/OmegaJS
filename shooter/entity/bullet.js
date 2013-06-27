@@ -15,14 +15,13 @@ define([
       
       this.addCollisionGroup('a');
       
+         
       this.bind('Collision', function() {
-        this.bind('EnterFrame', function() {
         this.destroy();
-        });
       });
       
       this.bind('EnterFrame', function() {
-        this.y += 5;
+        this.y += 7;
         if(this.y > o.getAttr().height) {
           this.destroy();
         }

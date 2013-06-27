@@ -18,6 +18,10 @@ define([
                 new Box2('orange');
                 this.destroy();
               });
+            },
+            
+            destroy: function() {
+              alert('test');
             }
           });
 

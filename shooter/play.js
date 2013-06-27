@@ -14,18 +14,15 @@ require(['shooter/require.config.js'], function () {
     // new object
     new Player();
     
-        //new Enemy();
+    //new Enemy();
     
-    /*
     pulse.bind(function (args) {
       ++x;
       if(x > 60) {
         new Enemy();
         x = 0;
       }
-    });
-    */
-    
+    });    
  
   });
 });

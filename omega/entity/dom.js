@@ -105,7 +105,9 @@ define(['omega/entity', 'omega/core', 'omega/device'], function (e, o, device) {
             obj.setStyle(style, value + 'px');
           },
           get: function () {
-            return obj.dom[propName];
+            if(obj && obj.dom) {
+              return obj.dom[propName];
+            }
           }
         });
         return obj;

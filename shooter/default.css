@@ -30,6 +30,14 @@ body {
     background-position: -138px -412px;
 }
 
+.player.destroy.anim_0 { background-position: -6px -309px; }
+.player.destroy.anim_1 { background-position: -70px -309px; }
+.player.destroy.anim_2 { background-position: -136px -309px; }
+.player.destroy.anim_3 { background-position: -202px -309px; }
+.player.destroy.anim_4 { background-position: -268px -309px; }
+.player.destroy.anim_5 { background-position: -334px -309px; }
+.player.destroy.anim_6 { background-position: -400px -309px; }
+
 .player.horz {
     transform: scale(0.8, 1);
     -ms-transform: scale(0.8, 1); 
@@ -39,6 +47,30 @@ body {
 .enemy {
     background-image: url(img/shooter/1945.png);
     background-position: -6px -466px;    
+}
+
+.enemy.anim_0 {
+    background-position: -70px -169px;    
+}
+
+.enemy.anim_1 {
+    background-position: -103px -169px;    
+}
+
+.enemy.anim_2 {
+    background-position: -136px -169px;    
+}
+
+.enemy.anim_3 {
+    background-position: -169px -169px;    
+}
+
+.enemy.anim_4 {
+    background-position: -202px -169px;    
+}
+
+.enemy.anim_5 {
+    background-position: -235px -169px;    
 }
 
 .bullet {

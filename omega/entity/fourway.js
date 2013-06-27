@@ -38,6 +38,11 @@ define([
             this.nudge(0, -this.fourway.y);          
         }  
       });
+    },
+            
+    disableFourway: function() {
+      this.fourway.x = 0;
+      this.fourway.y = 0;
     }
   });
 });
