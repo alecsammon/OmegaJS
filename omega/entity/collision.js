@@ -14,9 +14,7 @@ define([
       groups: {},
       collisions: []
     },
-    
-    
-            
+                  
     init: function () { 
       this.collision = {
         groups: {},

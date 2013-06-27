@@ -10,7 +10,8 @@ module.exports = function (grunt) {
       },
       core: [
         'Gruntfile.js',
-        '../boxy/**.js',
+        '../boxy/**/*.js',
+        '../shooter/**/*.js',
         '../omega/entity/*.js',
         '../omega/*.js'
       ]

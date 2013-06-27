@@ -15,11 +15,8 @@ define([
 
     init: function (x, y) {    
       this.depends(keyboard);
-      var fourway = {};
-      fourway.x = (typeof x !== 'undefined') ? x : 1;
-      fourway.y = (typeof y !== 'undefined') ? y : fourway.x;
-      
-      this.fourway = fourway;
+      this.fourway.x = (typeof x !== 'undefined') ? x : 1;
+      this.fourway.y = (typeof y !== 'undefined') ? y : this.fourway.x;
       
       this.bind('EnterFrame', function () {
         if(this.isKeyDown(37)) {

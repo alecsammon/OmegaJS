@@ -6,10 +6,10 @@ define([
   'use strict';
 
   return e.extend({
-    name: 'Animate',
     init: function () {
       this.depends(dom);
     },
+
     animate: function (from, to, loop, frames, callback) {
       var a = from,
               delay = 0,

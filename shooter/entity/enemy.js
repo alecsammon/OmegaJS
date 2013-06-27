@@ -22,6 +22,7 @@ define([
       this.bind('Collision', function() {
         
         this.removeCollision();
+        this.addClass('destroy');
         this.unbind('EnterFrame', 'Fly');
         
         this.animate(0, 5, 1, 4, function(){

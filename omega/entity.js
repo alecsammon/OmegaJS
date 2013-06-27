@@ -3,6 +3,7 @@ define(['omega/core', 'omega/lib/md5'], function (o, h) {
   'use strict';
 
   return {
+
     /**
      * this.initArgs
      * The arguments passed to intialise this entity
@@ -11,6 +12,12 @@ define(['omega/core', 'omega/lib/md5'], function (o, h) {
      */
     initArgs: [],
 
+    /**
+     * this.destroyList
+     * A list of methods to call when the entity is destroyed
+     * Used for removing binds, dom elements....
+     * @var array
+     */
     destroyList: [],
 
     /**
@@ -19,6 +26,8 @@ define(['omega/core', 'omega/lib/md5'], function (o, h) {
      * @var integer
      */
     uuid: null,
+
+    // ---
 
     /**
      * Shorthand for createing a new entity
@@ -32,18 +41,20 @@ define(['omega/core', 'omega/lib/md5'], function (o, h) {
      */
     create: function () {
       var depends = arguments[0],
-              returnE = this.extend({
-        init: function () {
+          returnE = this.extend({
+            init: function () {
+              this.depends.apply(this, depends);
+            }
+          }),
+          args = [],
+          i;
 
-          this.depends.apply(this, depends);
-        }
-      });
-
-      var args = [];
       delete arguments[0];
       for (var i in arguments) {
         args[args.length] = arguments[i];
       }
+
+      // ---
 
       var EntityConstructor = function (args) {
         return returnE.apply(this, args);
@@ -58,34 +69,33 @@ define(['omega/core', 'omega/lib/md5'], function (o, h) {
           key,
           init = true,
           returnE;
-
+      
+      // add properties of entity description to new entity
       for (key in e) {
-        if (EntityType.prototype[key]) {
-          throw 'Trying to overwrite ' + key;
-        }
-
-        if (typeof e[key] === 'function' && key !== 'destroy') {
+        if (key !== 'destroy') {
           EntityType.prototype[key] = e[key];
         }
-      }
+      } 
 
+      // add properties of this to new entity 
       for (key in this) {
         if (EntityType.prototype[key]) {
           throw 'Trying to overwrite ' + key;
         }
 
-        if (typeof this[key] === 'function' && key !== 'extend') {
+        if (key !== 'uuid' && key !== 'extend') {
           EntityType.prototype[key] = this[key];
         }
       }     
-
-      EntityType.prototype.destroyList = this.destroyList || [];
       
+      // add destroy method to list 
       if (e.destroy) {
         EntityType.prototype.destroyList[EntityType.prototype.destroyList.length] = e.destroy;
       }      
 
+      // create the new entity constructor
       returnE = function () {
+        // if not called with new - then create but do not call the initialised (yet)
         if (!(this instanceof returnE)) {
           init = false;
           var EntityConstructor = function (args) {
@@ -95,52 +105,32 @@ define(['omega/core', 'omega/lib/md5'], function (o, h) {
           return new EntityConstructor(arguments);
         }
         
-        var entity = new EntityType();
-
-        for (var key in e) {
-          if (typeof e[key] !== 'function' && key !== 'destroy') {
-            entity[key] = e[key];
-          }
+	// the new entity
+        var entity = new EntityType(),
+            args = Array.prototype.slice.call(arguments);
+        
+        // enabled an object to be passed as first argument
+        // this is then cascaded up through all the depends
+        if(!init && typeof arguments[0] === 'object') {
+          args.shift();
         }
-
-        entity.extendList = [];
+        
+        // basic properties of the entity
+	entity.extendList = [];
         entity.binds = {};
         entity.hash = this.hash;   
-        
-        var args = [];
-        var ignore = true;
-        if(init === false && typeof arguments[0] === 'object') {
-           for (var i in arguments) {
-            if(ignore) {
-              ignore = false;
-            } else {
-              args[args.length] = arguments[i];
-            }
-          }
-        } else {
-          args = arguments;
-        }
-          
         entity.initArgs = args;       
 
-        if (init !== false && typeof entity.init === 'function') {
+        if (init) {
           o.register(entity);                        
-
-          var args = [];
-          var ignore = true;
+          
+          var args = Array.prototype.slice.call(arguments);
           if(typeof arguments[0] === 'object') {
-             for (var i in arguments) {
-              if(ignore) {
-                ignore = false;
-              } else {
-                args[args.length] = arguments[i];
-              }
-            }
-          } else {
-            args = arguments;
+            args.shift();
           }
-        
+
           entity.init.apply(entity, args);
+
           o.bind('EnterFrame', function (args) {
             entity.trigger('LeaveFrame', args);
             entity.trigger('EnterFrame', args);
@@ -151,10 +141,7 @@ define(['omega/core', 'omega/lib/md5'], function (o, h) {
       };
 
       returnE.prototype.hash = h.hash(JSON.stringify(e, function (key, value) {
-        if (typeof value === 'function') {
-          return value + ''; // force to a string
-        }
-        return value;
+        return (typeof value === 'function') ? value + '' : value;
       }, ''));
 
       // return the constructor for our new entity
@@ -185,32 +172,15 @@ define(['omega/core', 'omega/lib/md5'], function (o, h) {
      * @param {Entity}
      */
     depend: function (on) {
-      var objHash,
-              args,
-              newE,
-              ignoredProperties = ['extendList', 'initArgs', 'binds', 'destroyList'];
-
-      if (typeof on === 'function') {
-        objHash = on.prototype.hash;
-      } else if (typeof on === 'object') {
-        objHash = on.hash;
-      } else {
-        // at the moment must supply object or function
-        // could supply a string which is loaded by require
-        // however this would break minification
-        throw 'Must pass an object or a function. Got a ' + typeof on;
-      }
-
-      if (!objHash) {
-        throw 'Entity has not method hash - are you sure it\'s an entity?';
-      }
+      var objHash = on.prototype ? on.prototype.hash : on.hash,
+          args,
+          newE,
+          ignoredProperties = ['extendList', 'initArgs', 'binds', 'destroyList'];
 
       // check if this object had already been included
       // return if it has - only need to attach once
-      for (var j = 0, jl = this.extendList.length; j < jl; j++) {
-        if (this.extendList[j] === objHash) {
-          return;
-        }
+      if(this.extendList.indexOf(objHash) !== -1) {
+        return;
       }
 
       if (typeof on === 'function') {
@@ -221,7 +191,7 @@ define(['omega/core', 'omega/lib/md5'], function (o, h) {
         args = newE.initArgs;
       }
       
-      // attach all the propeties
+      // attach all the propeties of this to the entity
       for (var key in newE) {
         if (ignoredProperties.indexOf(key) === -1) {
           this[key] = newE[key];
@@ -289,8 +259,6 @@ define(['omega/core', 'omega/lib/md5'], function (o, h) {
      * And unregisters if from core
      */
     destroy: function () {
-      this.binds = {};
-      
       for (var i = 0, il = this.destroyList.length; i < il; ++i) {
         this.destroyList[i].call(this);
       }
