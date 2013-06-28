@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "devDependencies": {
+    "grunt": "latest",
     "requirejs": "latest",
     "grunt-contrib-jshint": "latest",
     "grunt-contrib-csslint": "latest",
