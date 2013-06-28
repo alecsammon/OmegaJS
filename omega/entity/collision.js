@@ -18,20 +18,20 @@ define([
 
       this.depends(dom);
 
-      var checkCollision = function (a, b, group) {
-        if (
+      var checkCollision = function (a, b) {
+        return (
               a.y + a.h > b.y && a.y < b.y + b.h &&
               a.x + a.w > b.x && a.x < b.x + b.w
-        ) {
-          collisions.push({group: group, into : b});
-        }
+        );
       };
 
       var checkGroups = function () {
         for (var g in this.collision.groups) {
           for (var e in groups[g]) {
             if (this.uuid !== groups[g][e].uuid) {
-              checkCollision(this, groups[g][e], g);
+              if(checkCollision(this, groups[g][e], g)) {
+                collisions.push({group: g, into : groups[g][e]});
+              }
             }
           }
         }
@@ -48,6 +48,18 @@ define([
         }
       });
     },
+
+    destroy: function () {
+      for (var g in groups) {
+        for (var e in groups[g]) {
+          if (this.uuid === groups[g][e].uuid) {
+            delete groups[g][e];
+          }
+        }
+      }
+    },
+
+    // ---
 
     addCollisionGroup: function (group) {
       groups[group] = groups[group] || {};
@@ -67,15 +79,6 @@ define([
 
       this.collision.groups = {};
       return this;
-    },
-    destroy: function () {
-      for (var g in groups) {
-        for (var e in groups[g]) {
-          if (this.uuid === groups[g][e].uuid) {
-            delete groups[g][e];
-          }
-        }
-      }
     }
   });
 

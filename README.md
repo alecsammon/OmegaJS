@@ -9,5 +9,8 @@ MD5 - http://pajhome.org.uk/crypt/md5/
 - components
  - wind
  - gravity
- - collision
 
+sudo npm install -g grunt-cli
+- grunt jslint
+- grunt csslint
+- grunt test
