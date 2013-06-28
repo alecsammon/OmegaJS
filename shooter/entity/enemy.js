@@ -1,9 +1,9 @@
 define([
   'omega/core',
   'omega/entity',
-  'omega/entity/dom',
-  'omega/entity/animate',
-  'omega/entity/collision'
+  'omega/behaviour/dom',
+  'omega/behaviour/animate',
+  'omega/behaviour/collision'
 ], function (o, e, dom, animate, collision) {
 
   'use strict';
@@ -12,7 +12,7 @@ define([
     init: function () {
       var x = 10 + Math.random() * (o.getAttr().width - 20);
 
-      this.depends(dom(x, o.getAttr().height, 30, 32), collision, animate);
+      this.has(dom(x, o.getAttr().height, 30, 32), collision, animate);
       this.addClass('enemy').addClass('sprite');
       this.addCollisionGroup('a');
       this.addCollisionGroup('b');

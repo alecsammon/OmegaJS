@@ -1,11 +1,11 @@
 define([
   'omega/core',
   'omega/entity',
-  'omega/entity/dom',
-  'omega/entity/mouse',
-  'omega/entity/keyboard',
-  'omega/entity/text',
-  'omega/entity/fourway'
+  'omega/behaviour/dom',
+  'omega/behaviour/mouse',
+  'omega/behaviour/keyboard',
+  'omega/behaviour/text',
+  'omega/behaviour/fourway'
 ], function (o, e, dom, mouse, keyboard, text, fourway) {
 
   'use strict';
@@ -18,7 +18,7 @@ define([
     init: function (color) {
       var colors = ['blue', 'red', 'green', 'yellow'];
 
-      this.depends(dom, mouse, keyboard, text, fourway)
+      this.has(dom, mouse, keyboard, text, fourway)
       .setStyles({
         border: '1px solid #FFFFFF',
         color: '#FFFFFF'

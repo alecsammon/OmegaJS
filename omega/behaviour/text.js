@@ -1,4 +1,4 @@
-define(['omega/entity', 'omega/entity/dom'], function (e, dom) {
+define(['omega/entity', 'omega/behaviour/dom'], function (e, dom) {
 
   'use strict';
 
@@ -21,7 +21,7 @@ define(['omega/entity', 'omega/entity/dom'], function (e, dom) {
      * @returns this
      */
     init: function (args) {
-      this.depends(dom);
+      this.has(dom);
 
       Object.defineProperty(this, 'content', {
         set: function (value) {

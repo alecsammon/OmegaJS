@@ -1,7 +1,7 @@
 define([
   'omega/entity',
   'boxy/entity/box',
-  'omega/entity/dom'
+  'omega/behaviour/dom'
 ],
 function (e, box, dom) {
 
@@ -9,7 +9,7 @@ function (e, box, dom) {
 
   var Box2 = e.extend({
     init: function (color) {
-      this.depends(dom(300, 0, 100, 100), box({}, color));
+      this.has(dom(300, 0, 100, 100), box({}, color));
 
       this.bind('Click', function () {
         new Box2('orange');

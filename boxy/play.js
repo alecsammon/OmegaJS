@@ -23,7 +23,7 @@ require(['boxy/require.config.js'], function () {
 
     // long!
     var d = new (e.extend({init: function () {
-        this.depends(Box);
+        this.has(Box);
       }}))({dom: [20, 0, 50, 50]});
     d.setStyle('backgroundColor', 'yellow');
   });

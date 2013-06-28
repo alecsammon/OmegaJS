@@ -1,10 +1,10 @@
-define(['omega/entity', 'omega/entity/dom', 'omega/core'], function (e, dom, o) {
+define(['omega/entity', 'omega/behaviour/dom', 'omega/core'], function (e, dom, o) {
 
   'use strict';
 
   return e.extend({
     init: function () {
-      this.depends(dom);
+      this.has(dom);
 
       this.elem.addEventListener('click', this, false);
       this.elem.addEventListener('mousedown', this, false);

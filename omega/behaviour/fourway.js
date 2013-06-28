@@ -1,6 +1,6 @@
 define([
   'omega/entity',
-  'omega/entity/keyboard'
+  'omega/behaviour/keyboard'
 ], function (e, keyboard) {
 
   'use strict';
@@ -12,7 +12,7 @@ define([
     },
 
     init: function (x, y) {
-      this.depends(keyboard);
+      this.has(keyboard);
       this.fourway.x = (typeof x !== 'undefined') ? x : 1;
       this.fourway.y = (typeof y !== 'undefined') ? y : this.fourway.x;
 

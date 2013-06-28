@@ -1,6 +1,6 @@
 define([
   'omega/entity',
-  'omega/entity/dom'
+  'omega/behaviour/dom'
 ], function (e, dom) {
 
   'use strict';
@@ -16,7 +16,7 @@ define([
       var collisions = [];
       this.collision = {groups: {}};
 
-      this.depends(dom);
+      this.has(dom);
 
       var checkCollision = function (a, b) {
         return (

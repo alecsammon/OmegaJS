@@ -1,13 +1,13 @@
 define([
   'omega/entity',
-  'omega/entity/dom'
+  'omega/behaviour/dom'
 ], function (e, dom) {
 
   'use strict';
 
   return e.extend({
     init: function () {
-      this.depends(dom);
+      this.has(dom);
     },
 
     animate: function (from, to, loop, frames, callback) {

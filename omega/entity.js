@@ -6,7 +6,7 @@ define(['omega/core', 'omega/lib/md5'], function (o, h) {
     /**
      * this.initArgs
      * The arguments passed to intialise this entity
-     * Cascades through all depends()
+     * Cascades through all has()
      * @var array
      */
     initArgs: [],
@@ -29,17 +29,17 @@ define(['omega/core', 'omega/lib/md5'], function (o, h) {
      * Shorthand for createing a new entity
      * e.create([], arg1, arg2,....);
      *
-     * @param array depends
+     * @param array has 
      * @param mixed arg1 {optional}
      * @param mixed arg2 {optional}
      *
      * @return {Entity}
      */
     create: function () {
-      var depends = arguments[0],
+      var has = arguments[0],
         returnE = this.extend({
           init: function () {
-            this.depends.apply(this, depends);
+            this.has.apply(this, has);
           }
         }),
         args = [];
@@ -105,7 +105,7 @@ define(['omega/core', 'omega/lib/md5'], function (o, h) {
                 args = Array.prototype.slice.call(arguments);
 
         // enabled an object to be passed as first argument
-        // this is then cascaded up through all the depends
+        // this is then cascaded up through all the has 
         if (!init && typeof arguments[0] === 'object') {
           args.shift();
         }
@@ -143,28 +143,28 @@ define(['omega/core', 'omega/lib/md5'], function (o, h) {
       return returnE;
     },
     /**
-     * this.depends
+     * this.has
      *
      * Takes an array of entities to attach to this entity
      * This entity will gain all properties of the passed entities
      *
      * @param array
      */
-    depends: function () {
+    has: function () {
       for (var i = 0, il = arguments.length; i < il; i++) {
-        this.depend(arguments[i]);
+        this.include(arguments[i]);
       }
 
       return this;
     },
     /**
-     * this.depend
+     * this.include
      *
      * Takes a single entity and attaches all its propeties to this entity
      *
      * @param {Entity}
      */
-    depend: function (on) {
+    include: function (on) {
       var objHash = on.prototype ? on.prototype.hash : on.hash,
               args,
               newE,
