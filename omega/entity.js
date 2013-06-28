@@ -180,7 +180,7 @@ define(['omega/core', 'omega/lib/md5'], function (o, h) {
         newE = on();
         if (this.initArgs && this.initArgs[0]) {
           for (var i in newE) {
-            if (typeof newE[i] === this.initArgs[0][i]) {
+            if (this.initArgs[0][i]) {
               args = this.initArgs[0][i];
             }
           }

@@ -16,40 +16,36 @@ define([
 
       this.depends(dom(o.getAttr().width / 2 - 30, 20, 60, 45), fourway(5, 5), animate, collision)
           .boundStage()
-          .addClass('player').addClass('sprite');
-
-      this.animate(0, 2);
-
-      this.addCollisionGroup('b');
-
-      this.bind('Collision', function () {
-        this.addClass('destroy');
-        this.disableFourway();
-        this.unbind('EnterFrame', 'Skew');
-        this.animate(0, 6, 1, 4, function () {
-          this.destroy();
-        });
-      });
-
-      this.bind('EnterFrame', function () {
-        if (this.isKeyDown(37) || this.isKeyDown(39)) {
-          this.addClass('horz');
-        } else {
-          this.removeClass('horz');
-        }
-      }, 'Skew');
-
-      this.bind('EnterFrame', function () {
-        if (this.isKeyDown(17)) {  // ctrl
-          ++count;
-          if (count >= 20) {
-            new Bullet(this.x + 22, this.y + 45);
-            count = 0;
-          }
-        } else {
-          count = 20;
-        }
-      });
+          .addClass('player')
+          .addClass('sprite')
+          .animate(0, 2)
+          .addCollisionGroup('b')
+          .bind('Collision', function () {
+            this.addClass('destroy')
+              .disableFourway()
+              .unbind('EnterFrame', 'Skew')
+              .animate(0, 6, 1, 4, function () {
+                this.destroy();
+              });
+          })
+          .bind('EnterFrame', function () {
+            if (this.isKeyDown(37) || this.isKeyDown(39)) {
+              this.addClass('horz');
+            } else {
+              this.removeClass('horz');
+            }
+          }, 'Skew')
+          .bind('EnterFrame', function () {
+            if (this.isKeyDown(17)) {  // ctrl
+              ++count;
+              if (count >= 20) {
+                new Bullet(this.x + 22, this.y + 45);
+                count = 0;
+              }
+            } else {
+              count = 20;
+            }
+          });
     }
   });
 

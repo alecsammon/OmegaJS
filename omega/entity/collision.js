@@ -14,7 +14,7 @@ define([
 
     init: function () {
       var collisions = [];
-      this.collision.groups = {};
+      this.collision = {groups: {}};
 
       this.depends(dom);
 
@@ -53,6 +53,7 @@ define([
       groups[group] = groups[group] || {};
       groups[group][this.uuid] = this;
       this.collision.groups[group] = true;
+      return this;
     },
 
     removeCollision: function () {
@@ -65,6 +66,7 @@ define([
       }
 
       this.collision.groups = {};
+      return this;
     },
     destroy: function () {
       for (var g in groups) {
