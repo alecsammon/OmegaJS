@@ -12,18 +12,19 @@ define([
 
   return e.extend({
     init: function () {
-      var count = 20;
+      var count = 10;
 
-      this.has(dom(o.getAttr().width / 2 - 30, 20, 60, 45), fourway(5, 5), animate, collision)
+      this.has(dom(o.getAttr().width / 2 - 30, 20, 60, 45), fourway(8, 8), animate, collision)
           .boundStage()
           .addClass('player')
           .addClass('sprite')
           .animate(0, 2)
-          .addCollisionGroup('b')
+          .addCollision('b')
           .bind('Collision', function () {
             this.addClass('destroy')
               .disableFourway()
               .unbind('EnterFrame', 'Skew')
+              .removeClass('horz')
               .animate(0, 6, 1, 4, function () {
                 this.destroy();
               });
@@ -38,12 +39,12 @@ define([
           .bind('EnterFrame', function () {
             if (this.isKeyDown(17)) {  // ctrl
               ++count;
-              if (count >= 20) {
+              if (count >= 10) {
                 new Bullet(this.x + 22, this.y + 45);
                 count = 0;
               }
             } else {
-              count = 20;
+              count = 10;
             }
           });
     }

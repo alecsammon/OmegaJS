@@ -44,7 +44,7 @@ define([
         }
       }, 'animation');
 
-     return this;
+      return this;
     }
   });
 

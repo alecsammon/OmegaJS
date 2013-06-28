@@ -10,6 +10,7 @@ define(['omega/core', 'omega/lib/md5'], function (o, h) {
      * @var array
      */
     initArgs: [],
+
     /**
      * this.destroyList
      * A list of methods to call when the entity is destroyed
@@ -17,12 +18,14 @@ define(['omega/core', 'omega/lib/md5'], function (o, h) {
      * @var array
      */
     destroyList: [],
+
     /**
      * this.uuid
      * A unique identifier for this entitiy
      * @var integer
      */
     uuid: null,
+
     // ---
 
     /**
@@ -142,6 +145,7 @@ define(['omega/core', 'omega/lib/md5'], function (o, h) {
       // return the constructor for our new entity
       return returnE;
     },
+
     /**
      * this.has
      *
@@ -157,6 +161,7 @@ define(['omega/core', 'omega/lib/md5'], function (o, h) {
 
       return this;
     },
+
     /**
      * this.include
      *
@@ -205,6 +210,7 @@ define(['omega/core', 'omega/lib/md5'], function (o, h) {
 
       return this;
     },
+
     trigger: function (action, args) {
       if (this.binds[action] && this.binds[action].unnamed) {
         for (var i in this.binds[action].unnamed) {
@@ -222,6 +228,7 @@ define(['omega/core', 'omega/lib/md5'], function (o, h) {
 
       return this;
     },
+
     bind: function (action, call, name) {
       this.binds[action] = this.binds[action] || [];
 
@@ -235,6 +242,7 @@ define(['omega/core', 'omega/lib/md5'], function (o, h) {
 
       return this;
     },
+
     unbind: function (action, name) {
       if (this.binds[action]) {
         if (name) {
@@ -246,6 +254,7 @@ define(['omega/core', 'omega/lib/md5'], function (o, h) {
 
       return this;
     },
+
     /**
      * this.destroy
      *

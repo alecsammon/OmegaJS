@@ -18,7 +18,7 @@ require(['shooter/require.config.js'], function () {
 
     pulse.bind(function () {
       ++x;
-      if (x > 60) {
+      if (x > 20) {
         new Enemy();
         x = 0;
       }

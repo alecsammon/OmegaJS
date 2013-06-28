@@ -20,18 +20,9 @@ body {
     background-image: url(img/shooter/1945.png);    
 }
 
-.player,
-.player.anim_0 {
-    background-position: -6px -412px;
-}
-
-.player.anim_1 {
-    background-position: -72px -412px;
-}
-
-.player.anim_2 {
-    background-position: -138px -412px;
-}
+.player { background-position: -6px -412px; }
+.player.anim_1 { background-position: -72px -412px; }
+.player.anim_2 { background-position: -138px -412px; }
 
 .player.destroy.anim_0 { background-position: -6px -309px; }
 .player.destroy.anim_1 { background-position: -70px -309px; }
@@ -49,16 +40,16 @@ body {
     transform: scale(0.8, 1);
 }
 
-.enemy {
-    background-position: -6px -466px;
-}
+.enemy { background-position: -6px -467px; }
+.enemy.anim_1 { background-position: -39px -467px; }
+.enemy.anim_2 { background-position: -71px -467px; }
 
-.enemy.destroy.anim_0 { background-position: -70px -169px; }
-.enemy.destroy.anim_1 { background-position: -103px -169px; }
-.enemy.destroy.anim_2 { background-position: -136px -169px; }
-.enemy.destroy.anim_3 { background-position: -169px -169px; }
-.enemy.destroy.anim_4 { background-position: -202px -169px; }
-.enemy.destroy.anim_5 { background-position: -235px -169px; }
+.enemy.destroy.anim_0 { background-position: -72px -169px; }
+.enemy.destroy.anim_1 { background-position: -105px -169px; }
+.enemy.destroy.anim_2 { background-position: -138px -169px; }
+.enemy.destroy.anim_3 { background-position: -171px -169px; }
+.enemy.destroy.anim_4 { background-position: -204px -169px; }
+.enemy.destroy.anim_5 { background-position: -237px -169px; }
 
 .bullet {
     background-position: -11px -211px;

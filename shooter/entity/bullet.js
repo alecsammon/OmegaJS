@@ -11,7 +11,7 @@ define([
     init: function (x, y) {
       this.has(dom(x, y, 17, 15), collision).addClass('bullet').addClass('sprite');
 
-      this.addCollisionGroup('a');
+      this.addCollision('a');
 
 
       this.bind('Collision', function () {
@@ -19,7 +19,7 @@ define([
       });
 
       this.bind('EnterFrame', function () {
-        this.y += 7;
+        this.y += 12;
         if (this.y > o.getAttr().height) {
           this.destroy();
         }

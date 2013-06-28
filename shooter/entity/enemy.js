@@ -9,29 +9,29 @@ define([
   'use strict';
 
   return e.extend({
+    name: 'Enemy',
+
     init: function () {
-      var x = 10 + Math.random() * (o.getAttr().width - 20);
+      var speed = (Math.random() * 3) + 1,
+          x = 10 + Math.random() * (o.getAttr().width - 52);
 
-      this.has(dom(x, o.getAttr().height, 30, 32), collision, animate);
-      this.addClass('enemy').addClass('sprite');
-      this.addCollisionGroup('a');
-      this.addCollisionGroup('b');
-
-      this.bind('Collision', function () {
-
-        this.removeCollision();
-        this.addClass('destroy');
-        this.unbind('EnterFrame', 'Fly');
-
-        this.animate(0, 5, 1, 4, function () {
-          this.destroy();
-        });
-
-      });
-
-      this.bind('EnterFrame', function () {
-        --this.y;
-      }, 'Fly');
+      this.has(dom(x, o.getAttr().height, 29, 31), collision, animate)
+          .addClass('enemy').addClass('sprite')
+          .addCollision(['a', 'b'])
+          .animate(0, 2, -1, 2)
+          .bind('Collision', function (args) {
+            if(args.into.name !== 'Enemy') {
+              this.removeCollision()
+                  .addClass('destroy')
+                  .unbind('EnterFrame', 'Fly')
+                  .animate(0, 5, 1, 3, function () {
+                    this.destroy();
+                  });
+            }
+          })
+          .bind('EnterFrame', function () {
+            this.y -= speed;
+          }, 'Fly');
     }
   });
 

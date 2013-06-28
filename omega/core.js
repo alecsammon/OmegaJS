@@ -131,27 +131,21 @@ define([
       trigger = function (action, args) {
         if (binds[action]) {
           for (var i in binds[action]) {
-            for (var j = 0, jl = binds[action][i].length; j < jl; ++j) {
-              binds[action][i][j].call.call(binds[action][i][j].context, args);
-            }
+            binds[action][i].call.call(binds[action][i].entity, args);
           }
         }
       },
 
-      bind = function (action, call, context) {
+      bind = function (action, call, entity) {
         if (!binds[action]) {
           binds[action] = {};
         }
 
-        if (!binds[action][context.uuid]) {
-          binds[action][context.uuid] = [];
-        }
-
-        binds[action][context.uuid][binds[action][context.uuid].length] = {call: call, context: context};
+        binds[action][entity.uuid] = {call: call, entity: entity};
       },
 
-      unbind = function (action, context) {
-        delete binds[action][context.uuid];
+      unbind = function (action, entity) {
+        delete binds[action][entity.uuid];
       },
 
       getScaling = function (width, height) {

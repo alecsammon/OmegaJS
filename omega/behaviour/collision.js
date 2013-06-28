@@ -61,10 +61,16 @@ define([
 
     // ---
 
-    addCollisionGroup: function (group) {
-      groups[group] = groups[group] || {};
-      groups[group][this.uuid] = this;
-      this.collision.groups[group] = true;
+    addCollision: function (newGroups) {
+      if(typeof newGroups === 'string') {
+        newGroups = [newGroups];
+      }
+
+      for (var i = 0, il = newGroups.length; i < il; ++i) {
+        groups[newGroups[i]] = groups[newGroups[i]] || {};
+        groups[newGroups[i]][this.uuid] = this;
+        this.collision.groups[newGroups[i]] = true;
+      }
       return this;
     },
 
