@@ -19,7 +19,7 @@
   "quotmark": "single",
   "unused": true,
   "trailing": true,
-  "maxdepth": 3,
+  "maxdepth": 4,
   "maxcomplexity": 8,
   "predef": [
     "$",

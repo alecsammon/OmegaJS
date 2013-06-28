@@ -1,6 +1,6 @@
 define([
   'omega/entity',
-  'omega/entity/dom',
+  'omega/entity/dom'
 ], function (e, dom) {
 
   'use strict';
@@ -12,33 +12,35 @@ define([
 
     animate: function (from, to, loop, frames, callback) {
       var a = from,
-              delay = 0,
-              count = 0,
-              loop = loop ? loop : -1,
-              frames = frames ? frames : 1;
+          frameCount = 0,
+          count = 0;
+
+      loop = loop ? loop : -1;
+      frames = frames ? frames : 1;
+
+      var endAnimation = function () {
+        this.unbind('EnterFrame', 'animation');
+        callback.call(this);
+      };
 
       this.bind('EnterFrame', function () {
-        ++delay;
-        if (delay >= frames) {
+        ++frameCount;
+        if (frameCount >= frames) {
           this.removeClass('anim_' + a);
           ++a;
-          this.addClass('anim_' + a);
+
           if (a > to) {
             a = from;
-            if (loop !== -1) {
-              ++count;
-              if (count >= loop) {
-                this.unbind('EnterFrame', 'animation');
-                if (callback) {
-                  callback.call(this);
-                }
-              }
+            this.addClass('anim_' + a);
+
+            ++count;
+            if (count >= loop && loop !== -1) {
+              endAnimation.call(this);
             }
-
+          } else {
+            this.addClass('anim_' + a);
           }
-
-
-          delay = 0;
+          frameCount = 0;
         }
       }, 'animation');
     }

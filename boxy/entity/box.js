@@ -1,8 +1,8 @@
 define([
-  'omega/core', 
-  'omega/entity', 
-  'omega/entity/dom', 
-  'omega/entity/mouse', 
+  'omega/core',
+  'omega/entity',
+  'omega/entity/dom',
+  'omega/entity/mouse',
   'omega/entity/keyboard',
   'omega/entity/text',
   'omega/entity/fourway'
@@ -11,15 +11,13 @@ define([
   'use strict';
 
   return e.extend({
-    name: 'Box',
-            
     _left: true,
     _up: true,
     _freeze: false,
-    
-    init: function (color) {   
+
+    init: function (color) {
       var colors = ['blue', 'red', 'green', 'yellow'];
-      
+
       this.depends(dom, mouse, keyboard, text, fourway)
       .setStyles({
         border: '1px solid #FFFFFF',
@@ -31,11 +29,11 @@ define([
       })
       .bind('EnterFrame', function (fps) {
         this.content = 'FPS:' + fps + '<br />UUID:' + this.uuid;
-                
-        if(this.isKeyDown(17)) {
+
+        if (this.isKeyDown(17)) {
           this.setStyle('backgroundColor', colors[Math.round(Math.random() * colors.length)]);
         }
-        
+
         this.move();
       })
       .bind('MouseDown', function () {

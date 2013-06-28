@@ -8,21 +8,21 @@ require(['shooter/require.config.js'], function () {
     'shooter/entity/enemy'
   ], function (o, pulse, Player, Enemy) {
     var x = 0;
-    
+
     o.init(document.getElementById('omegajs'), 800, 600);
 
     // new object
     new Player();
-    
+
     //new Enemy();
-    
-    pulse.bind(function (args) {
+
+    pulse.bind(function () {
       ++x;
-      if(x > 60) {
+      if (x > 60) {
         new Enemy();
         x = 0;
       }
-    });    
- 
+    });
+
   });
 });

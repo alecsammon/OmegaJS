@@ -3,7 +3,6 @@ define(['omega/core', 'omega/lib/md5'], function (o, h) {
   'use strict';
 
   return {
-
     /**
      * this.initArgs
      * The arguments passed to intialise this entity
@@ -11,7 +10,6 @@ define(['omega/core', 'omega/lib/md5'], function (o, h) {
      * @var array
      */
     initArgs: [],
-
     /**
      * this.destroyList
      * A list of methods to call when the entity is destroyed
@@ -19,14 +17,12 @@ define(['omega/core', 'omega/lib/md5'], function (o, h) {
      * @var array
      */
     destroyList: [],
-
     /**
      * this.uuid
      * A unique identifier for this entitiy
      * @var integer
      */
     uuid: null,
-
     // ---
 
     /**
@@ -41,13 +37,12 @@ define(['omega/core', 'omega/lib/md5'], function (o, h) {
      */
     create: function () {
       var depends = arguments[0],
-          returnE = this.extend({
-            init: function () {
-              this.depends.apply(this, depends);
-            }
-          }),
-          args = [],
-          i;
+        returnE = this.extend({
+          init: function () {
+            this.depends.apply(this, depends);
+          }
+        }),
+        args = [];
 
       delete arguments[0];
       for (var i in arguments) {
@@ -63,21 +58,21 @@ define(['omega/core', 'omega/lib/md5'], function (o, h) {
       EntityConstructor.prototype = returnE.prototype;
       return new EntityConstructor(args);
     },
+    extend: function (e) {
+      var EntityType = function () {
+      },
+              key,
+              init = true,
+              returnE;
 
-    extend: function (e) {        
-      var EntityType = function () {},
-          key,
-          init = true,
-          returnE;
-      
       // add properties of entity description to new entity
       for (key in e) {
         if (key !== 'destroy') {
           EntityType.prototype[key] = e[key];
         }
-      } 
+      }
 
-      // add properties of this to new entity 
+      // add properties of this to new entity
       for (key in this) {
         if (EntityType.prototype[key]) {
           throw 'Trying to overwrite ' + key;
@@ -86,12 +81,12 @@ define(['omega/core', 'omega/lib/md5'], function (o, h) {
         if (key !== 'uuid' && key !== 'extend') {
           EntityType.prototype[key] = this[key];
         }
-      }     
-      
-      // add destroy method to list 
+      }
+
+      // add destroy method to list
       if (e.destroy) {
         EntityType.prototype.destroyList[EntityType.prototype.destroyList.length] = e.destroy;
-      }      
+      }
 
       // create the new entity constructor
       returnE = function () {
@@ -104,28 +99,28 @@ define(['omega/core', 'omega/lib/md5'], function (o, h) {
           EntityConstructor.prototype = returnE.prototype;
           return new EntityConstructor(arguments);
         }
-        
-	// the new entity
+
+        // the new entity
         var entity = new EntityType(),
-            args = Array.prototype.slice.call(arguments);
-        
+                args = Array.prototype.slice.call(arguments);
+
         // enabled an object to be passed as first argument
         // this is then cascaded up through all the depends
-        if(!init && typeof arguments[0] === 'object') {
+        if (!init && typeof arguments[0] === 'object') {
           args.shift();
         }
-        
+
         // basic properties of the entity
-	entity.extendList = [];
+        entity.extendList = [];
         entity.binds = {};
-        entity.hash = this.hash;   
-        entity.initArgs = args;       
+        entity.hash = this.hash;
+        entity.initArgs = args;
 
         if (init) {
-          o.register(entity);                        
-          
-          var args = Array.prototype.slice.call(arguments);
-          if(typeof arguments[0] === 'object') {
+          o.register(entity);
+
+          args = Array.prototype.slice.call(arguments);
+          if (typeof arguments[0] === 'object') {
             args.shift();
           }
 
@@ -147,7 +142,6 @@ define(['omega/core', 'omega/lib/md5'], function (o, h) {
       // return the constructor for our new entity
       return returnE;
     },
-
     /**
      * this.depends
      *
@@ -163,7 +157,6 @@ define(['omega/core', 'omega/lib/md5'], function (o, h) {
 
       return this;
     },
-
     /**
      * this.depend
      *
@@ -173,24 +166,30 @@ define(['omega/core', 'omega/lib/md5'], function (o, h) {
      */
     depend: function (on) {
       var objHash = on.prototype ? on.prototype.hash : on.hash,
-          args,
-          newE,
-          ignoredProperties = ['extendList', 'initArgs', 'binds', 'destroyList'];
+              args,
+              newE,
+              ignoredProperties = ['extendList', 'initArgs', 'binds', 'destroyList'];
 
       // check if this object had already been included
       // return if it has - only need to attach once
-      if(this.extendList.indexOf(objHash) !== -1) {
+      if (this.extendList.indexOf(objHash) !== -1) {
         return;
       }
 
       if (typeof on === 'function') {
         newE = on();
-        args = (this.initArgs && this.initArgs[0] && this.initArgs[0][newE.name]) ? this.initArgs[0][newE.name] : [];
+        if (this.initArgs && this.initArgs[0]) {
+          for (var i in newE) {
+            if (typeof newE[i] === this.initArgs[0][i]) {
+              args = this.initArgs[0][i];
+            }
+          }
+        }
       } else {
-        newE = on;        
+        newE = on;
         args = newE.initArgs;
       }
-      
+
       // attach all the propeties of this to the entity
       for (var key in newE) {
         if (ignoredProperties.indexOf(key) === -1) {
@@ -206,11 +205,10 @@ define(['omega/core', 'omega/lib/md5'], function (o, h) {
 
       return this;
     },
-
     trigger: function (action, args) {
       if (this.binds[action] && this.binds[action].unnamed) {
-        for (var i in this.binds[action].unnamed) {   
-          if(this.binds[action] && this.binds[action].unnamed) {
+        for (var i in this.binds[action].unnamed) {
+          if (this.binds[action] && this.binds[action].unnamed) {
             this.binds[action].unnamed[i].call(this, args);
           }
         }
@@ -224,7 +222,6 @@ define(['omega/core', 'omega/lib/md5'], function (o, h) {
 
       return this;
     },
-
     bind: function (action, call, name) {
       this.binds[action] = this.binds[action] || [];
 
@@ -238,9 +235,8 @@ define(['omega/core', 'omega/lib/md5'], function (o, h) {
 
       return this;
     },
-
     unbind: function (action, name) {
-      if(this.binds[action]) {
+      if (this.binds[action]) {
         if (name) {
           delete this.binds[action].named[name];
         } else {
@@ -250,7 +246,6 @@ define(['omega/core', 'omega/lib/md5'], function (o, h) {
 
       return this;
     },
-
     /**
      * this.destroy
      *

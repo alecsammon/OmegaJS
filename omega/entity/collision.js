@@ -1,76 +1,75 @@
 define([
-  'omega/entity', 
+  'omega/entity',
   'omega/entity/dom'
 ], function (e, dom) {
 
   'use strict';
-  
+
   var groups = {};
 
   return e.extend({
-    name: 'Collision',
-            
     collision: {
-      groups: {},
-      collisions: []
+      groups: {}
     },
-                  
-    init: function () { 
-      this.collision = {
-        groups: {},
-        collisions: []
-      };
+
+    init: function () {
+      var collisions = [];
+      this.collision.groups = {};
+
       this.depends(dom);
-      
-      this.bind('EnterFrame', function() {
-        this.collision.collisions = [];
-        this.checkGroups();
+
+      var checkCollision = function (a, b, group) {
+        if (
+              a.y + a.h > b.y && a.y < b.y + b.h &&
+              a.x + a.w > b.x && a.x < b.x + b.w
+        ) {
+          collisions.push({group: group, into : b});
+        }
+      };
+
+      var checkGroups = function () {
+        for (var g in this.collision.groups) {
+          for (var e in groups[g]) {
+            if (this.uuid !== groups[g][e].uuid) {
+              checkCollision(this, groups[g][e], g);
+            }
+          }
+        }
+      };
+
+      this.bind('EnterFrame', function () {
+        collisions = [];
+        checkGroups.call(this);
       });
-      
-      this.bind('LeaveFrame', function() {      
-        for (var i = 0, il = this.collision.collisions.length; i < il; ++i) {
-          this.trigger('Collision', this.collision.collisions[i]);
-        }   
-      });      
+
+      this.bind('LeaveFrame', function () {
+        for (var i = 0, il = collisions.length; i < il; ++i) {
+          this.trigger('Collision', collisions[i]);
+        }
+      });
     },
-    
-    addCollisionGroup: function (group) { 
+
+    addCollisionGroup: function (group) {
       groups[group] = groups[group] || {};
       groups[group][this.uuid] = this;
       this.collision.groups[group] = true;
     },
-            
-    removeCollision: function () { 
+
+    removeCollision: function () {
       for (var g in groups) {
-        for (var e in groups[g]) {   
-          if(this.uuid === groups[g][e].uuid) {
+        for (var e in groups[g]) {
+          if (this.uuid === groups[g][e].uuid) {
             delete groups[g][e];
           }
         }
       }
-      
-      this.collision.groups = {};      
-    },            
-            
-    checkGroups: function () {
-      for (var g in this.collision.groups) {
-        for (var e in groups[g]) {     
-          if(this.uuid !== groups[g][e].uuid) {
-            if(
-                  this.y + this.h > groups[g][e].y && this.y < groups[g][e].y + groups[g][e].h
-                  && this.x + this.w > groups[g][e].x && this.x < groups[g][e].x + groups[g][e].w
-            ) {
-                this.collision.collisions.push({group: g, with: groups[g][e]});
-            }
-          }
-        }
-      }   
+
+      this.collision.groups = {};
     },
-            
-    destroy: function() {
+    destroy: function () {
       for (var g in groups) {
-        for (var e in groups[g]) {   
-          if(this.uuid === groups[g][e].uuid) {
+        for (var e in groups[g]) {
+          if (this.uuid === groups[g][e].uuid) {
             delete groups[g][e];
           }
         }

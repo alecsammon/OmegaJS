@@ -1,0 +1,14 @@
+{
+  "name": "OmegaJs",
+  "version": "0.1.0",
+  "private": true,
+  "devDependencies": {
+    "requirejs": "latest",
+    "grunt-contrib-jshint": "latest",
+    "grunt-contrib-csslint": "latest",
+    "grunt-cucumber": "latest",
+    "cucumber-js": "git://github.com/atrniv/cucumber-js.git",
+    "jsdom": "latest",
+    "should": "latest"
+  }
+}

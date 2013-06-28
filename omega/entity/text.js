@@ -3,8 +3,6 @@ define(['omega/entity', 'omega/entity/dom'], function (e, dom) {
   'use strict';
 
   return e.extend({
-    name: 'text',
-    
     /**
      * The text of the object
      * Supports full HTML

@@ -13,7 +13,7 @@ require(['boxy/require.config.js'], function () {
     new Box({dom: [0, 0, 150, 150]}, 'red');
 
     // another new object
-    var b = new Box2('green');
+    new Box2('green');
 
     // quick setup
     var c = e.create([Box], {dom: [20, 0, 50, 50]});

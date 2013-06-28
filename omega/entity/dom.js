@@ -3,8 +3,6 @@ define(['omega/entity', 'omega/core', 'omega/device'], function (e, o, device) {
   'use strict';
 
   return e.extend({
-    name: 'dom',
-    
     /**
      * this.x
      *
@@ -105,7 +103,7 @@ define(['omega/entity', 'omega/core', 'omega/device'], function (e, o, device) {
             obj.setStyle(style, value + 'px');
           },
           get: function () {
-            if(obj && obj.dom) {
+            if (obj && obj.dom) {
               return obj.dom[propName];
             }
           }
@@ -175,12 +173,12 @@ define(['omega/entity', 'omega/core', 'omega/device'], function (e, o, device) {
       }
       return this;
     },
-            
+
     addClass: function (className) {
-      this.elem.classList.add(className);      
+      this.elem.classList.add(className);
       return this;
     },
-            
+
     removeClass: function (className) {
       this.elem.classList.remove(className);
       return this;

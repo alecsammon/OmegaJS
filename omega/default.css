@@ -1,18 +1,18 @@
-#omegajs * {
-    transform-origin: 0 0;
-    position: absolute;
-    margin: 0;
-    padding: 0;
-}
-
 #omegajs {
     position: relative;
     overflow: hidden;
     display: none;
 }
 
+#omegajs div {
+    position: absolute;
+}
+
 #omegajs,
-#omegajs * {
+#omegajs div {
+    margin: 0;
+    padding: 0;    
+    transform-origin: 0 0;    
     -webkit-touch-callout: none;
     -webkit-user-select: none;
     -khtml-user-select: none;

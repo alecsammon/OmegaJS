@@ -16,9 +16,12 @@ body {
    }
 }
 
+.sprite {
+    background-image: url(img/shooter/1945.png);    
+}
+
 .player,
 .player.anim_0 {
-    background-image: url(img/shooter/1945.png);
     background-position: -6px -412px;
 }
 
@@ -39,13 +42,14 @@ body {
 .player.destroy.anim_6 { background-position: -400px -309px; }
 
 .player.horz {
-    transform: scale(0.8, 1);
     -ms-transform: scale(0.8, 1);
     -webkit-transform: scale(0.8, 1);
+    -o-transform: scale(0.8, 1);
+    -moz-transform: scale(0.8, 1);
+    transform: scale(0.8, 1);
 }
 
 .enemy {
-    background-image: url(img/shooter/1945.png);
     background-position: -6px -466px;
 }
 
@@ -57,6 +61,5 @@ body {
 .enemy.destroy.anim_5 { background-position: -235px -169px; }
 
 .bullet {
-    background-image: url(img/shooter/1945.png);
     background-position: -11px -211px;
 }

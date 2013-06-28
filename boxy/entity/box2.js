@@ -3,23 +3,20 @@ define([
   'boxy/entity/box',
   'omega/entity/dom'
 ],
-        function (e, Box, Dom) {
+function (e, box, dom) {
 
-          'use strict';
+  'use strict';
 
-          var Box2 = e.extend({
-            name: 'Box2',
-            
-            init: function (color) {
-              var dom = Dom(300, 0, 100, 100);
-              this.depends(dom, Box({}, color));
+  var Box2 = e.extend({
+    init: function (color) {
+      this.depends(dom(300, 0, 100, 100), box({}, color));
 
-              this.bind('Click', function () {
-                new Box2('orange');
-                this.destroy();
-              });
-            }            
-          });
+      this.bind('Click', function () {
+        new Box2('orange');
+        this.destroy();
+      });
+    }
+  });
 
-          return Box2;
-        });
+  return Box2;
+});

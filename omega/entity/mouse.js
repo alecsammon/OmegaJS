@@ -2,7 +2,7 @@ define(['omega/entity', 'omega/entity/dom', 'omega/core'], function (e, dom, o) 
 
   'use strict';
 
-  return e.extend({ 
+  return e.extend({
     init: function () {
       this.depends(dom);
 
@@ -29,7 +29,7 @@ define(['omega/entity', 'omega/entity/dom', 'omega/core'], function (e, dom, o) 
       });
     },
 
-    destroy: function() {
+    destroy: function () {
       this.elem.removeEventListener('click', this);
       this.elem.removeEventListener('mousedown', this);
       this.elem.removeEventListener('mouseup', this);
@@ -38,7 +38,7 @@ define(['omega/entity', 'omega/entity/dom', 'omega/core'], function (e, dom, o) 
 
     handleEvent: function(e) {
       var action;
-      switch(e.type) {
+      switch (e.type) {
       case 'click':
         action = 'Click';
         break;
