@@ -43,6 +43,8 @@ define([
           frameCount = 0;
         }
       }, 'animation');
+
+     return this;
     }
   });
 

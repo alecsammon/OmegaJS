@@ -38,6 +38,8 @@ define([
     disableFourway: function () {
       this.fourway.x = 0;
       this.fourway.y = 0;
+
+      return this;
     }
   });
 });
