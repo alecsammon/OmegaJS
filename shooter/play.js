@@ -9,7 +9,7 @@ require(['shooter/require.config.js'], function () {
   ], function (o, pulse, Player, Enemy) {
     var x = 0;
 
-    o.init(document.getElementById('omegajs'), 800, 600);
+    o.init(document.getElementById('omegajs'), 800, 600, 40);
 
     // new object
     new Player();

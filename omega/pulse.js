@@ -49,7 +49,8 @@ define(['omega/performance'], function (performance) {
       };
 
   return {
-    start: function () {
+    start: function (fps) {
+      targetFps = fps;
       pulse();
       return this;
     },

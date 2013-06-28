@@ -19,3 +19,4 @@ var core = function () {
 };
 
 module.exports = core;
+

@@ -7,7 +7,7 @@ require(['boxy/require.config.js'], function () {
     'boxy/entity/box2',
     'omega/entity'
   ], function (o, Box, Box2, e) {
-    o.init(document.getElementById('omegajs'), 800, 600);
+    o.init(document.getElementById('omegajs'), 800, 600, 40);
 
     // new object
     new Box({dom: [0, 0, 150, 150]}, 'red');

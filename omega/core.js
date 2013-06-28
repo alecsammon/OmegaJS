@@ -12,7 +12,7 @@ define([
       nextId = 1,
       binds = {},
     
-      init = function (container, width, height) {
+      init = function (container, width, height, fps) {
         attr = {width: width, height: height, scale: getScaling(width, height)};
 
         // the container
@@ -38,7 +38,7 @@ define([
         //stage.lock();
         pulse.bind(function (args) {
           trigger('EnterFrame', args);
-        }).start();
+        }).start(fps);
       },
 
       initMouse = function () {
@@ -170,8 +170,8 @@ define([
   // ---
 
   return {
-    init: function (container, width, height) {
-      init(container, width, height);
+    init: function (container, width, height, fps) {
+      init(container, width, height, fps);
       return this;
     },
             
