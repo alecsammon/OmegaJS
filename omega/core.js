@@ -108,12 +108,9 @@ define([
        */
       unRegister = function (entity) {
         for (var action in binds) {
-          for (var uuid in binds[action]) {
-            if (uuid * 1 === entity.uuid * 1) {
-              delete binds[action][uuid];
-            }
-          }
+          unbind(action, entity);
         }
+
         delete entities[entity.uuid];
       },
 
@@ -130,22 +127,30 @@ define([
 
       trigger = function (action, args) {
         if (binds[action]) {
-          for (var i in binds[action]) {
-            binds[action][i].call.call(binds[action][i].entity, args);
+          for (var i in binds[action].entities) {
+            binds[action].entities[i].call.call(binds[action].entities[i].entity, args);
+          }
+
+          for (var j = 0, bl = binds[action].other.length; j < bl; ++j) {
+            binds[action].other[j].call.call(binds[action].other[j].context, args);
           }
         }
       },
 
-      bind = function (action, call, entity) {
+      bind = function (action, call, context) {
         if (!binds[action]) {
-          binds[action] = {};
+          binds[action] = {entities:{}, other:[]};
         }
-
-        binds[action][entity.uuid] = {call: call, entity: entity};
+ 
+        if(context && context.uuid) {
+          binds[action].entities[context.uuid] = {call: call, entity: context};
+        } else {
+          binds[action].other[binds[action].other.length] = {call: call, context: context};
+        }
       },
 
       unbind = function (action, entity) {
-        delete binds[action][entity.uuid];
+        delete binds[action].entities[entity.uuid];
       },
 
       getScaling = function (width, height) {

@@ -1,52 +1,42 @@
 define([
+  'omega/core',
   'omega/entity',
   'omega/behaviour/dom'
-], function (e, dom) {
+], function (o, e, dom) {
 
   'use strict';
 
-  var groups = {};
-
-  return e.extend({
-    collision: {
-      groups: {}
-    },
-
-    init: function () {
-      var collisions = [];
-      this.collision = {groups: {}};
-
-      this.has(dom);
-
-      var checkCollision = function (a, b) {
+  var groups = {},
+      checkCollision = function (a, b) {
         return (
+              a.uuid !== b.uuid &&
               a.y + a.h > b.y && a.y < b.y + b.h &&
               a.x + a.w > b.x && a.x < b.x + b.w
         );
       };
 
-      var checkGroups = function () {
-        for (var g in this.collision.groups) {
-          for (var e in groups[g]) {
-            if (this.uuid !== groups[g][e].uuid) {
-              if(checkCollision(this, groups[g][e], g)) {
-                collisions.push({group: g, into : groups[g][e]});
-              }
-            }
+  o.bind('EnterFrame', function() {
+    var collisions = [];
+    for (var g in groups) {
+      for (var a in groups[g]) {
+        for (var b in groups[g]) {
+          if(checkCollision(groups[g][a], groups[g][b])) {
+            collisions.push({g: g, a: groups[g][a], b: groups[g][b]});
           }
         }
-      };
+      }
+    }
 
-      this.bind('EnterFrame', function () {
-        collisions = [];
-        checkGroups.call(this);
-      });
+    for (var i = 0, il = collisions.length; i < il; ++i) {
+      collisions[i].a.trigger('Collision', {group: collisions[i].g, into: collisions[i].b});
+    }
+  });
 
-      this.bind('LeaveFrame', function () {
-        for (var i = 0, il = collisions.length; i < il; ++i) {
-          this.trigger('Collision', collisions[i]);
-        }
-      });
+  // ---
+
+  return e.extend({
+    init: function () {
+      this.has(dom);
     },
 
     destroy: function () {
@@ -69,7 +59,6 @@ define([
       for (var i = 0, il = newGroups.length; i < il; ++i) {
         groups[newGroups[i]] = groups[newGroups[i]] || {};
         groups[newGroups[i]][this.uuid] = this;
-        this.collision.groups[newGroups[i]] = true;
       }
       return this;
     },
@@ -83,7 +72,6 @@ define([
         }
       }
 
-      this.collision.groups = {};
       return this;
     }
   });
