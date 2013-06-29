@@ -54,3 +54,10 @@ body {
 .bullet {
     background-position: -11px -211px;
 }
+
+.coin {
+  font-weight: bold;
+  text-align: center;
+  font-size: 20px;
+  color: yellow;
+}

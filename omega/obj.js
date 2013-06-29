@@ -18,9 +18,9 @@ define(['omega/device'], function (device) {
 
     this.setStyle = function (styleType, style) {
       switch (styleType) {
-      case 'TransformOrigin':
-      case 'Transform':
-        this.elem.style[device.getCssPrefix() + styleType] = style;
+      case 'transformOrigin':
+      case 'transform':
+        this.elem.style['-' + device.getCssPrefix() + '-' + styleType] = style;
         break;
       default:
         this.elem.style[styleType] = style;

@@ -19,7 +19,7 @@ define([
       });
 
       this.bind('EnterFrame', function () {
-        this.y += 12;
+        this.y += 20;
         if (this.y > o.getAttr().height) {
           this.destroy();
         }

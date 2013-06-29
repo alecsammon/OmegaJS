@@ -1,10 +1,11 @@
 define([
   'omega/core',
   'omega/entity',
+  'shooter/entity/coin',
   'omega/behaviour/dom',
   'omega/behaviour/animate',
   'omega/behaviour/collision'
-], function (o, e, dom, animate, collision) {
+], function (o, e, Coin, dom, animate, collision) {
 
   'use strict';
 
@@ -24,9 +25,11 @@ define([
               this.removeCollision()
                   .addClass('destroy')
                   .unbind('EnterFrame', 'Fly')
-                  .animate(0, 5, 1, 3, function () {
+                  .animate(0, 5, 1, 2, function () {
                     this.destroy();
                   });
+
+              new Coin(this.x, this.y);
             }
           })
           .bind('EnterFrame', function () {

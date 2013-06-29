@@ -11,13 +11,14 @@ define([
       entities = {},
       nextId = 1,
       binds = {},
+      container,
     
-      init = function (container, width, height, fps) {
-        attr = {width: width, height: height, scale: getScaling(width, height)};
+      init = function (elem, width, height, fps) {
+        var scale = getScaling(width, height);
+        attr = {width: width, height: height, scale: scale};
 
         // the container
-        container = (new Obj(container))
-                .appendChild(stage.clone())
+        container = (new Obj(elem))
                 .setStyles({
           width: width * attr.scale + 'px',
           height: height * attr.scale + 'px',
@@ -25,6 +26,7 @@ define([
         });
 
         stage.setStyles({
+          transformOrigin: '0 0',
           transform: 'scale(' + attr.scale + ')',
           width: width + 'px',
           height: height + 'px',
@@ -32,56 +34,12 @@ define([
 
         attr.left = container.elem.offsetLeft;
         attr.top = container.elem.offsetTop;
-
-        initMouse();
-        initKeys();
         //stage.lock();
-
+ 
         pulse.bind(function (fps) {
           trigger('EnterFrame', fps);
-          container.elem.innerHTML = stage.elem.innerHTML;
+          container.elem.innerHTML = stage.elem.outerHTML
         }).start(fps);
-      },
-
-      initMouse = function () {
-        var triggerMouse = function (action, e) {
-          trigger(action, {
-            x: (e.clientX - attr.left) / attr.scale,
-            y: (attr.height - e.clientY - attr.top) / attr.scale
-          });
-        };
-
-        stage.elem.onclick = function (e) {
-          triggerMouse('Click', e);
-        };
-        stage.elem.onmousedown = function (e) {
-          triggerMouse('MouseDown', e);
-        };
-        stage.elem.onmouseup = function (e) {
-          triggerMouse('MouseUp', e);
-        };
-        stage.elem.onmousemove = function (e) {
-          triggerMouse('MouseMove', e);
-        };
-      },
-
-      initKeys = function () {
-        var triggerKey = function (action, e) {
-          trigger(action, {
-            keyCode: e.keyCode,
-            shiftKey: e.shiftKey,
-            ctrlKey: e.ctrlKey,
-            altKey: e.altKey
-          });
-        };
-        
-
-        document.onkeydown = function (e) {
-          triggerKey('KeyDown', e);
-        };
-        document.onkeyup = function (e) {
-          triggerKey('KeyUp', e);
-        };
       },
 
       /**

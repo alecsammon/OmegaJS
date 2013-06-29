@@ -23,10 +23,6 @@ define([
         border: '1px solid #FFFFFF',
         color: '#FFFFFF'
       })
-      .bind('Click', function () {
-        this._left = !this._left;
-        this._up = !this._up;
-      })
       .bind('EnterFrame', function (fps) {
         this.content = 'FPS:' + fps + '<br />UUID:' + this.uuid;
 
@@ -41,6 +37,10 @@ define([
       })
       .bind('MouseUp', function () {
         this._freeze = false;
+      })
+      .bind('Click', function () {
+        this._left = !this._left;
+        this._up = !this._up;
       })
       .bind('Dragging', function (e) {
         this.x = e.newX;

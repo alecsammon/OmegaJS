@@ -2,6 +2,25 @@ define(['omega/entity', 'omega/core'], function (e, o) {
 
   'use strict';
 
+  var triggerKey = function (action, e) {
+          o.trigger(action, {
+            keyCode: e.keyCode,
+            shiftKey: e.shiftKey,
+            ctrlKey: e.ctrlKey,
+            altKey: e.altKey
+          });
+        };
+
+  window.onkeydown = function (e) {
+    triggerKey('KeyDown', e);
+  };
+
+  window.onkeyup = function (e) {
+    triggerKey('KeyUp', e);
+  };
+
+  // ---
+
   return e.extend({
     keyboard: {keys: {}},
 

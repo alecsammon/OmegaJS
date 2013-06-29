@@ -26,7 +26,7 @@ define(['omega/performance'], function (performance) {
 
         var avg = sum / length;
 
-        if (length > targetFps) {
+        if (length > targetFps * 2) {
           frameDurations.shift();
         }
 

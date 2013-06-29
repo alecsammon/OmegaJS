@@ -9,7 +9,7 @@ require(['shooter/require.config.js'], function () {
   ], function (o, pulse, Player, Enemy) {
     var x = 0;
 
-    o.init(document.getElementById('omegajs'), 800, 600, 40);
+    o.init(document.getElementById('omegajs'), 1000, 600, 40);
 
     // new object
     new Player();
@@ -17,10 +17,10 @@ require(['shooter/require.config.js'], function () {
     //new Enemy();
 
     pulse.bind(function () {
-      ++x;
-      if (x > 20) {
+      --x;
+      if (x < 0) {
         new Enemy();
-        x = 0;
+        x = 10;
       }
     });
 

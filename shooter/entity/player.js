@@ -12,22 +12,27 @@ define([
 
   return e.extend({
     init: function () {
-      var count = 10;
+      var count = 0,
+          alive = true;
 
-      this.has(dom(o.getAttr().width / 2 - 30, 20, 60, 45), fourway(8, 8), animate, collision)
+      this.has(dom(o.getAttr().width / 2 - 30, 20, 60, 45), fourway(12), animate, collision)
           .boundStage()
           .addClass('player')
           .addClass('sprite')
           .animate(0, 2)
           .addCollision('b')
-          .bind('Collision', function () {
-            this.addClass('destroy')
-              .disableFourway()
-              .unbind('EnterFrame', 'Skew')
-              .removeClass('horz')
-              .animate(0, 6, 1, 4, function () {
-                this.destroy();
-              });
+          .addCollision('c')
+          .bind('Collision', function (args) {
+            if(args.into.name === 'Enemy') {
+              alive = false;
+              this.addClass('destroy')
+                .disableFourway()
+                .unbind('EnterFrame', 'Skew')
+                .removeClass('horz')
+                .animate(0, 6, 1, 4, function () {
+                  this.destroy();
+                });
+            }
           })
           .bind('EnterFrame', function () {
             if (this.isKeyDown(37) || this.isKeyDown(39)) {
@@ -37,14 +42,14 @@ define([
             }
           }, 'Skew')
           .bind('EnterFrame', function () {
-            if (this.isKeyDown(17)) {  // ctrl
-              ++count;
-              if (count >= 10) {
+            if (alive && this.isKeyDown(17)) {  // ctrl
+              --count;
+              if (count <= 0) {
                 new Bullet(this.x + 22, this.y + 45);
-                count = 0;
+                count = 5;
               }
             } else {
-              count = 10;
+              count = 0;
             }
           });
     }
