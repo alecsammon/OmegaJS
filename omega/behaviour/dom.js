@@ -105,9 +105,9 @@ define(['omega/entity', 'omega/core', 'omega/device'], function (e, o, device) {
               obj.trigger('ExitFrame', 'top');
             } else if (propName === 'y' && value < -obj.dom.h) {
               obj.trigger('ExitFrame', 'bottom');
-            } else if (propName === 'x' && value > o.getAttr().width) { 
+            } else if (propName === 'x' && value > o.getAttr().width) {
               obj.trigger('ExitFrame', 'right');
-            } else if (propName === 'x' && value < -obj.dom-w) { 
+            } else if (propName === 'x' && value < -obj.dom-w) {
               obj.trigger('ExitFrame', 'left');
             }
           },

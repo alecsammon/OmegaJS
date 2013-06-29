@@ -47,9 +47,5 @@ define(['omega/device'], function (device) {
       this.elem.removeChild(child);
       return this;
     };
-   
-    this.clone = function () {
-      return this.elem.cloneNode(true);
-    }
   };
 });

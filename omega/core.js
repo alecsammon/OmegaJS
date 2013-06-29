@@ -16,7 +16,7 @@ define([
         attr = {width: width, height: height, scale: getScaling(width, height)};
 
         // the container
-        var container = (new Obj(container))
+        container = (new Obj(container))
                 .appendChild(stage.clone())
                 .setStyles({
           width: width * attr.scale + 'px',
