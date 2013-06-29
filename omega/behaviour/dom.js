@@ -95,12 +95,21 @@ define(['omega/entity', 'omega/core', 'omega/device'], function (e, o, device) {
                 value = Math.min(Math.max(value, 0), o.getAttr().height - obj.dom.h);
               }
             }
-
             // tbh I have no idea why I need to do this
             // FF baulks if you don't!
             dom[propName] = value;
             obj.dom = dom;
             obj.setStyle(style, value + 'px');
+
+            if (propName === 'y' && value > o.getAttr().height) {
+              obj.trigger('ExitFrame', 'top');
+            } else if (propName === 'y' && value < -obj.dom.h) {
+              obj.trigger('ExitFrame', 'bottom');
+            } else if (propName === 'x' && value > o.getAttr().width) { 
+              obj.trigger('ExitFrame', 'right');
+            } else if (propName === 'x' && value < -obj.dom-w) { 
+              obj.trigger('ExitFrame', 'left');
+            }
           },
           get: function () {
             if (obj && obj.dom) {

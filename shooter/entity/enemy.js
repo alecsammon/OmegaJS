@@ -12,7 +12,7 @@ define([
     name: 'Enemy',
 
     init: function () {
-      var speed = (Math.random() * 3) + 1,
+      var speed = (Math.random() * 5) + 5,
           x = 10 + Math.random() * (o.getAttr().width - 52);
 
       this.has(dom(x, o.getAttr().height, 29, 31), collision, animate)
@@ -31,7 +31,10 @@ define([
           })
           .bind('EnterFrame', function () {
             this.y -= speed;
-          }, 'Fly');
+          }, 'Fly')
+          .bind('ExitFrame', function() {
+            this.destroy();
+          });
     }
   });
 

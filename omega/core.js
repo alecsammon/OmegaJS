@@ -16,8 +16,8 @@ define([
         attr = {width: width, height: height, scale: getScaling(width, height)};
 
         // the container
-        (new Obj(container))
-                .appendChild(stage.elem)
+        var container = (new Obj(container))
+                .appendChild(stage.clone())
                 .setStyles({
           width: width * attr.scale + 'px',
           height: height * attr.scale + 'px',
@@ -27,17 +27,19 @@ define([
         stage.setStyles({
           transform: 'scale(' + attr.scale + ')',
           width: width + 'px',
-          height: height + 'px'
+          height: height + 'px',
         });
 
-        attr.left = stage.elem.parentNode.offsetLeft;
-        attr.top = stage.elem.parentNode.offsetTop;
+        attr.left = container.elem.offsetLeft;
+        attr.top = container.elem.offsetTop;
 
         initMouse();
         initKeys();
         //stage.lock();
-        pulse.bind(function (args) {
-          trigger('EnterFrame', args);
+
+        pulse.bind(function (fps) {
+          trigger('EnterFrame', fps);
+          container.elem.innerHTML = stage.elem.innerHTML;
         }).start(fps);
       },
 

@@ -13,37 +13,37 @@ define(['omega/performance'], function (performance) {
       },
 
       pulse = function () {
-        var tweak;
+        var tweak,
+            length = frameDurations.length,
+            frameOffset = 1000 / targetFps;
 
-        frameDurations[frameDurations.length] = performance.now() - framestart;
-
-        if (frameDurations.length > 20) {
-          frameDurations.shift();
-        }
+        frameDurations[length] = performance.now() - framestart;
 
         var sum = 0;
-        for (var i = 0, il = frameDurations.length; i < il; i++) {
+        for (var i = 0; i < length; i++) {
           sum += frameDurations[i];
         }
 
-        var avg = sum / frameDurations.length;
+        var avg = sum / length;
 
-        if (avg > 1000 / targetFps) {
-          tweak = -Math.min(Math.ceil(avg - 1000 / targetFps), 10);
-        } else {
-          tweak = Math.min(Math.ceil(1000 / targetFps - avg), 10);
+        if (length > targetFps) {
+          frameDurations.shift();
         }
 
-        actualFps = Math.round(1000 / avg);
+        if (avg > 1000 / targetFps) {
+          tweak = -Math.min(Math.ceil(avg - frameOffset), 50);
+        } else {
+          tweak = Math.min(Math.ceil(frameOffset - avg), 50);
+        }
 
         setTimeout(function () {
+          pulse();
+          actualFps = Math.round(1000 / avg);
+
           for (var i = 0, il = binds.length; i < il; i++) {
             binds[i].call.call(binds[i].context, actualFps);
           }
-
-          pulse();
-
-        }, (1000 / targetFps) + tweak);
+        }, frameOffset + tweak);
 
         framestart = performance.now();
       };
@@ -54,12 +54,10 @@ define(['omega/performance'], function (performance) {
       pulse();
       return this;
     },
+
     bind: function (call, context) {
       bind(call, context);
       return this;
-    },
-    getFps: function () {
-      return actualFps;
     }
   };
 });
