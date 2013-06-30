@@ -38,7 +38,7 @@ define([
  
         pulse.bind(function (fps) {
           trigger('EnterFrame', fps);
-          container.elem.innerHTML = stage.elem.outerHTML
+          container.elem.innerHTML = stage.elem.outerHTML;
         }).start(fps);
       },
 

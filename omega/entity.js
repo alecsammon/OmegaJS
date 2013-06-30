@@ -26,6 +26,9 @@ define(['omega/core', 'omega/lib/md5'], function (o, h) {
      */
     uuid: null,
 
+    extendList: [],
+    binds: {},
+
     // ---
 
     /**
@@ -61,35 +64,45 @@ define(['omega/core', 'omega/lib/md5'], function (o, h) {
       EntityConstructor.prototype = returnE.prototype;
       return new EntityConstructor(args);
     },
+
+    cloneObject: function(obj) {
+      if(!obj || typeof(obj) !== 'object') {
+        return obj;
+      }
+
+      var cloned = obj.constructor();
+      for(var key in obj) {
+        cloned[key] = this.cloneObject(obj[key]);
+      }
+
+      return cloned;
+    },
+
     extend: function (e) {
-      var EntityType = function () {
-      },
-              key,
-              init = true,
-              returnE;
+      var EntityType = function () {},
+          key,
+          init = true,
+          returnE;
 
       // add properties of entity description to new entity
       for (key in e) {
-        if (key !== 'destroy') {
+        if (typeof e[key] === 'function') {
           EntityType.prototype[key] = e[key];
         }
       }
 
       // add properties of this to new entity
       for (key in this) {
-        if (EntityType.prototype[key]) {
-          throw 'Trying to overwrite ' + key;
-        }
-
-        if (key !== 'uuid' && key !== 'extend') {
+        if (typeof this[key] === 'function') {
           EntityType.prototype[key] = this[key];
         }
       }
 
-      // add destroy method to list
-      if (e.destroy) {
-        EntityType.prototype.destroyList[EntityType.prototype.destroyList.length] = e.destroy;
+      if(e.destroy) {
+        this.destroyList[this.destroyList.length] = e.destroy;
       }
+
+      var that = this;
 
       // create the new entity constructor
       returnE = function () {
@@ -105,19 +118,27 @@ define(['omega/core', 'omega/lib/md5'], function (o, h) {
 
         // the new entity
         var entity = new EntityType(),
-                args = Array.prototype.slice.call(arguments);
+            args,
+            key;
 
-        // enabled an object to be passed as first argument
-        // this is then cascaded up through all the has 
-        if (!init && typeof arguments[0] === 'object') {
-          args.shift();
+        for (key in e) {
+          entity[key] = entity.cloneObject(e[key]);
+        }
+
+        for (key in that) {
+          entity[key] = entity.cloneObject(that[key]);
+        }
+
+        // enables an object to be passed as first argument
+        // this is then cascaded up through all the behavious
+        entity.initArgs = Array.prototype.slice.call(arguments);
+        if (!init && typeof entity.initArgs[0] === 'object') {
+          entity.initArgs.shift();
         }
 
         // basic properties of the entity
-        entity.extendList = [];
-        entity.binds = {};
         entity.hash = this.hash;
-        entity.initArgs = args;
+        delete entity.uuid;
 
         if (init) {
           o.register(entity);
@@ -130,7 +151,6 @@ define(['omega/core', 'omega/lib/md5'], function (o, h) {
           entity.init.apply(entity, args);
 
           o.bind('EnterFrame', function (args) {
-            entity.trigger('LeaveFrame', args);
             entity.trigger('EnterFrame', args);
           }, entity);
         }
@@ -138,6 +158,8 @@ define(['omega/core', 'omega/lib/md5'], function (o, h) {
         return entity;
       };
 
+      // create a hash of the entity/behaviour
+      // used to prevent a behaviour being attached twice
       returnE.prototype.hash = h.hash(JSON.stringify(e, function (key, value) {
         return (typeof value === 'function') ? value + '' : value;
       }, ''));
@@ -171,9 +193,9 @@ define(['omega/core', 'omega/lib/md5'], function (o, h) {
      */
     include: function (on) {
       var objHash = on.prototype ? on.prototype.hash : on.hash,
-              args,
-              newE,
-              ignoredProperties = ['extendList', 'initArgs', 'binds', 'destroyList'];
+          args,
+          newE,
+          ignoredProperties = ['extendList', 'initArgs', 'binds', 'destroyList'];
 
       // check if this object had already been included
       // return if it has - only need to attach once
@@ -198,7 +220,7 @@ define(['omega/core', 'omega/lib/md5'], function (o, h) {
       // attach all the propeties of this to the entity
       for (var key in newE) {
         if (ignoredProperties.indexOf(key) === -1) {
-          this[key] = newE[key];
+          this[key] = this.cloneObject(newE[key]);
         }
       }
 

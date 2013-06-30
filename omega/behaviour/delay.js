@@ -1,4 +1,4 @@
-define(['omega/entity', 'omega/core'], function (e, o) {
+define(['omega/entity'], function (e) {
 
   'use strict';
 
