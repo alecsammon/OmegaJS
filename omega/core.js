@@ -18,18 +18,15 @@ define([
         attr = {width: width, height: height, scale: scale};
 
         // the container
-        container = (new Obj(elem))
-                .setStyles({
+        container = (new Obj(elem)).setStyles({
           width: width * attr.scale + 'px',
           height: height * attr.scale + 'px',
           display: 'block'
         });
 
-        stage.setStyles({
-          transformOrigin: '0 0',
-          transform: 'scale(' + attr.scale + ')',
-          width: width + 'px',
+        stage.addClass('stage').setStyles({
           height: height + 'px',
+          transform: 'scale(' + attr.scale + ')'
         });
 
         attr.left = container.elem.offsetLeft;
@@ -42,7 +39,7 @@ define([
           trigger('EnterFrame', fps);
           trigger('RenderStart');
           container.elem.innerHTML = stage.elem.outerHTML;
-          trigger('LeaveFrame');
+          trigger('RenderEnd');
         }).start(fps);
       },
 

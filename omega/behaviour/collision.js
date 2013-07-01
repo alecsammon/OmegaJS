@@ -9,6 +9,7 @@ define([
   var groups = {},
       checkCollision = function (a, b) {
         return (
+              a.hash !== b.hash &&
               a.uuid !== b.uuid &&
               a.y + a.h > b.y && a.y < b.y + b.h &&
               a.x + a.w > b.x && a.x < b.x + b.w
@@ -28,6 +29,7 @@ define([
     }
 
     for (var i = 0, il = collisions.length; i < il; ++i) {
+      o.trigger('Collision', [collisions[i].a, collisions[i].b], collisions[i].g);
       collisions[i].a.trigger('Collision', {group: collisions[i].g, into: collisions[i].b});
     }
   });

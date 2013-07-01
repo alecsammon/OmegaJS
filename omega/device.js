@@ -30,6 +30,7 @@ define([], function () {
 
       return prefix;
     },
+
     isTouchDevice: function () {
       return ('ontouchstart' in document.documentElement);
     }

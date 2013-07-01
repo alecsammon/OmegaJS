@@ -20,17 +20,15 @@ define([
           .addClass('enemy').addClass('sprite')
           .addCollision(['a', 'b'])
           .animate(0, 2, -1, 2)
-          .bind('Collision', function (args) {
-            if(args.into.name !== 'Enemy') {
-              this.removeCollision()
-                  .addClass('destroy')
-                  .unbind('EnterFrame', 'Fly')
-                  .animate(0, 5, 1, 2, function () {
-                    this.destroy();
-                  });
+          .bind('Collision', function () {
+            this.removeCollision()
+                .addClass('destroy')
+                .unbind('EnterFrame', 'Fly')
+                .animate(0, 5, 1, 2, function () {
+                  this.destroy();
+                });
 
-              new Coin(this.x, this.y);
-            }
+            new Coin(this.x, this.y);
           })
           .bind('EnterFrame', function () {
             this.y -= speed;

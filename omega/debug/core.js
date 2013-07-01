@@ -15,14 +15,14 @@ define([
   var debug = {
     init: function (container) {
       var fpsData = [],
-              percentageEnterFrameData = [],
-              percentageRenderData = [],
-              entityData = [],
-              next = dataLength,
-              frameStart,
-              enterFrames = [],
-              percentageEnterFrame,
-              percentageRender;
+          percentageEnterFrameData = [],
+          percentageRenderData = [],
+          entityData = [],
+          next = dataLength,
+          frameStart,
+          enterFrames = [],
+          percentageEnterFrame,
+          percentageRender;
 
       for (var i = 0; i < dataLength; ++i) {
         fpsData[i] = [i, -1];
@@ -37,7 +37,7 @@ define([
       $debug.append('<div class="plot fps"></div>');
       var fpsPlot = $.plot('#omega_debug .fps', [], {
         series: {shadowSize: 0, clickable: false, hoverable: false, lines: { lineWidth: 1}},
-        yaxis: {min: 0, max: pulse.getTargetFps() * 1.5, labelWidth: 10},
+        yaxis: {min: 0, max: pulse.getTargetFps() * 1.5, labelWidth: 20, ticks: 5},
         xaxis: {show: false},
         legend: {position: 'nw'}
       });
@@ -45,7 +45,7 @@ define([
       $debug.append('<div class="plot time"></div>');
       var timePlot = $.plot('#omega_debug .time', [], {
         series: {shadowSize: 0, clickable: false, hoverable: false, lines: { fill: true,  lineWidth: 1}},
-        yaxis: {min: 0, max: 100, labelWidth: 10},
+        yaxis: {min: 0, max: 100, labelWidth: 20, tickSize: 25},
         xaxis: {show: false},
         legend: {position: 'nw'}
       });
@@ -53,7 +53,7 @@ define([
       $debug.append('<div class="plot entity"></div>');
       var entityPlot = $.plot('#omega_debug .entity', [], {
         series: {shadowSize: 0, clickable: false, hoverable: false, lines: { lineWidth: 1}},
-        yaxis: {min: 0, max: 20, labelWidth: 10},
+        yaxis: {min: 0, max: 20, labelWidth: 20, ticks: 5},
         xaxis: {show: false},
         legend: {position: 'nw'}
       });
@@ -78,14 +78,19 @@ define([
         percentageEnterFrame = (renderStart - frameStart) / lastFrameDuration * 100;
       });
 
-      o.bind('LeaveFrame', function () {
+      o.bind('RenderEnd', function () {
         frameend = performance.now();
         percentageRender = (frameend - renderStart) / lastFrameDuration * 100;
       });
 
+      entityPlot.getOptions().grid.markings = [];
+      o.bind('Collision', function() {
+        entityPlot.getOptions().grid.markings[entityPlot.getOptions().grid.markings.length] = { color: '#ffffff', lineWidth: 1, xaxis: {from: next, to: next, lineWidth: 1}};
+      });
+
       setInterval(function () {
         var fps,
-                sum = 0;
+            sum = 0;
 
         for (var i = 0, il = enterFrames.length; i < il; ++i) {
           sum += enterFrames[i];
@@ -96,10 +101,9 @@ define([
         fpsData[fpsData.length] = [next, fps];
 
         fpsPlot.setData([
-          {data: [[next - dataLength + 1, pulse.getTargetFps()], [next, pulse.getTargetFps()]], label: 'Target FPS'},
-          {data: fpsData, label: 'Actual FPS'}
-        ]
-                );
+          {data: [[next - dataLength + 1, pulse.getTargetFps()], [next, pulse.getTargetFps()]], label: 'Target FPS (' + pulse.getTargetFps()  + ')'},
+          {data: fpsData, label: 'Actual FPS (' + (Math.round(fps*10)/10).toFixed(1) + ')'}
+        ]);
 
         fpsPlot.setupGrid();
         fpsPlot.draw();
@@ -113,8 +117,8 @@ define([
         percentageRenderData[percentageRenderData.length] = [next, percentageRender + percentageEnterFrame];
 
         timePlot.setData([
-          {data: percentageEnterFrameData, label: 'Percentage to frame ready'},
-          {data: percentageRenderData, label: 'Percentage to frame rendered'}
+          {data: percentageEnterFrameData, label: 'Frame ready (' + (Math.round(percentageEnterFrame * 10)/10).toFixed(1) + '%)'},
+          {data: percentageRenderData, label: 'Frame rendered (' + (Math.round((percentageRender + percentageEnterFrame)*10)/10).toFixed(1) + '%)'}
         ]);
 
         timePlot.setupGrid();
@@ -130,7 +134,7 @@ define([
         }
 
         entityPlot.setData([
-          {data: entityData, label: 'Entity Count'}
+          {data: entityData, label: 'Entities (' + Object.keys(o.getEntities()).length + ')'},
         ]);
 
         entityPlot.setupGrid();
