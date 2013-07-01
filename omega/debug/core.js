@@ -1,7 +1,9 @@
 define([
   'omega/core',
   'omega/performance',
-  'omega/pulse'
+  'omega/pulse',
+  'jquery',
+  'flot'
 ], function (o, performance, pulse) {
 
   'use strict';
@@ -34,7 +36,7 @@ define([
 
       $debug.append('<div class="plot fps"></div>');
       var fpsPlot = $.plot('#omega_debug .fps', [], {
-        series: {shadowSize: 0},
+        series: {shadowSize: 0, clickable: false, hoverable: false, lines: { lineWidth: 1}},
         yaxis: {min: 0, max: pulse.getTargetFps() * 1.5, labelWidth: 10},
         xaxis: {show: false},
         legend: {position: 'nw'}
@@ -42,7 +44,7 @@ define([
 
       $debug.append('<div class="plot time"></div>');
       var timePlot = $.plot('#omega_debug .time', [], {
-        series: {shadowSize: 0},
+        series: {shadowSize: 0, clickable: false, hoverable: false, lines: { fill: true,  lineWidth: 1}},
         yaxis: {min: 0, max: 100, labelWidth: 10},
         xaxis: {show: false},
         legend: {position: 'nw'}
@@ -50,7 +52,7 @@ define([
 
       $debug.append('<div class="plot entity"></div>');
       var entityPlot = $.plot('#omega_debug .entity', [], {
-        series: {shadowSize: 0},
+        series: {shadowSize: 0, clickable: false, hoverable: false, lines: { lineWidth: 1}},
         yaxis: {min: 0, max: 20, labelWidth: 10},
         xaxis: {show: false},
         legend: {position: 'nw'}

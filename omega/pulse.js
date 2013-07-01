@@ -40,6 +40,9 @@ define(['omega/performance'], function (performance) {
           pulse();
           actualFps = Math.round(1000 / avg);
 
+          // loop through binds backwards
+          // so binds attached later get called first
+          // this is so the debugger works!
           for (var i = binds.length-1; i >= 0; --i) {
             binds[i].call.call(binds[i].context, actualFps);
           }
