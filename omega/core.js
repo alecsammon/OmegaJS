@@ -1,8 +1,9 @@
 define([
   'omega/device',
   'omega/obj',
-  'omega/pulse'
-], function (device, Obj, pulse) {
+  'omega/pulse',
+  'omega/performance'
+], function (device, Obj, pulse, performance) {
 
   'use strict';
 
@@ -36,9 +37,11 @@ define([
         attr.top = container.elem.offsetTop;
         //stage.lock();
  
-        pulse.bind(function (fps) {
-          trigger('EnterFrame', fps);
+        pulse.bind(function (fps) {          
+          trigger('EnterFrame', fps, performance.now());
+          trigger('RenderStart', performance.now());
           container.elem.innerHTML = stage.elem.outerHTML;
+          trigger('LeaveFrame', performance.now());
         }).start(fps);
       },
 
