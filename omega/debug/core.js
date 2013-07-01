@@ -58,10 +58,10 @@ define([
         legend: {position: 'nw'}
       });
 
-      var frameStart = performance.now(),
-              lastFrameDuration = 1000 / pulse.getTargetFps(),
-              renderStart = performance.now() + (1000 / pulse.getTargetFps()),
-              frameend = performance.now() + (1000 / pulse.getTargetFps());
+      frameStart = performance.now();
+      var lastFrameDuration = 1000 / pulse.getTargetFps(),
+           renderStart = performance.now() + (1000 / pulse.getTargetFps()),
+           frameend = performance.now() + (1000 / pulse.getTargetFps());
 
       pulse.bind(function () {
         lastFrameDuration = performance.now() - frameStart;
@@ -141,9 +141,9 @@ define([
         ++next;
       }, 1000 / updatesPerSecond);
     }
-  }
+  };
 
   return function (container) {
     return debug.init(container);
-  }
+  };
 });

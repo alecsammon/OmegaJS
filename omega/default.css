@@ -26,7 +26,7 @@
     border: 1px solid #FFFFFF;
 }
 
-#omega_debug div.plot {
+#omega_debug .plot {
     height: 100px;
     margin: 0 10px;
 }

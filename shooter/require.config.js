@@ -6,6 +6,6 @@ require.config({
     shooter: './'
   },
   shim: {
-      flot  : ["jquery"]
-  }  
+    flot  : ['jquery']
+  }
 });

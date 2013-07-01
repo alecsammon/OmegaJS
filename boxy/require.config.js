@@ -1,6 +1,11 @@
 require.config({
   paths: {
     omega: '../omega/',
-    boxy: './'
+    boxy: './',
+    jquery: '../omega/lib/jquery',
+    flot: '../omega/lib/jquery.flot'
+  },
+  shim: {
+    flot  : ['jquery']
   }
 });

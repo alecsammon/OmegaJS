@@ -9,7 +9,7 @@ GLOBAL.requirejs.config({
 
 document = require('jsdom').jsdom('<html><head></head><body><div id="omega"></div></body></html>');
 window = document.createWindow();
-
+navigator = 'gruntjs';
 window.performance = {};
 window.performance.now = function() {
   var now = process.hrtime();
