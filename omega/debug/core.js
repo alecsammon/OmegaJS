@@ -25,10 +25,10 @@ define([
               percentageRender;
 
       for (var i = 0; i < dataLength; ++i) {
-        fpsData[i] = [i, 0];
-        percentageEnterFrameData[i] = [i, 0];
-        percentageRenderData[i] = [i, 0];
-        entityData[i] = [i, 0];
+        fpsData[i] = [i, -1];
+        percentageEnterFrameData[i] = [i, -1];
+        percentageRenderData[i] = [i, -1];
+        entityData[i] = [i, -1];
       }
 
       var $debug = $('<div id="omega_debug"></div>');
