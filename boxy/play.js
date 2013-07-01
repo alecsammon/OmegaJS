@@ -8,9 +8,9 @@ require(['boxy/require.config.js'], function () {
     'omega/entity',
     'omega/debug/core'
   ], function (o, Box, Box2, e, Debug) {
-    o.init(document.getElementById('omegajs'), 800, 200, 40);
+    o.init(document.getElementById('omegajs'), 800, 600, 40);
 
-    new Debug();
+    new Debug(document.getElementById('omegajs'));
 
     // new object
     new Box({dom: [0, 0, 150, 150]}, 'red');

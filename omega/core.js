@@ -38,10 +38,10 @@ define([
         //stage.lock();
  
         pulse.bind(function (fps) {          
-          trigger('EnterFrame', fps, performance.now());
-          trigger('RenderStart', performance.now());
+          trigger('EnterFrame', fps);
+          trigger('RenderStart');
           container.elem.innerHTML = stage.elem.outerHTML;
-          trigger('LeaveFrame', performance.now());
+          trigger('LeaveFrame');
         }).start(fps);
       },
 
@@ -179,6 +179,10 @@ define([
     endScene: function () {
       endScene();
       return this;
+    },
+            
+    getEntities: function() {
+      return entities;
     }
   };
 });

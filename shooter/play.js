@@ -5,11 +5,13 @@ require(['shooter/require.config.js'], function () {
     'omega/core',
     'omega/pulse',
     'shooter/entity/player',
-    'shooter/entity/enemy'
-  ], function (o, pulse, Player, Enemy) {
+    'shooter/entity/enemy',
+    'omega/debug/core'
+  ], function (o, pulse, Player, Enemy, Debug) {
     var x = 0;
 
-    o.init(document.getElementById('omegajs'), 1000, 600, 40);
+    o.init(document.getElementById('omegajs'), 1000, 600, 30);
+    new Debug(document.getElementById('omegajs'));
 
     // new object
     new Player();
@@ -20,7 +22,7 @@ require(['shooter/require.config.js'], function () {
       --x;
       if (x < 0) {
         new Enemy();
-        x = 10;
+        x = 5;
       }
     });
 

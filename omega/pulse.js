@@ -40,7 +40,7 @@ define(['omega/performance'], function (performance) {
           pulse();
           actualFps = Math.round(1000 / avg);
 
-          for (var i = 0, il = binds.length; i < il; i++) {
+          for (var i = binds.length-1; i >= 0; --i) {
             binds[i].call.call(binds[i].context, actualFps);
           }
         }, frameOffset + tweak);
@@ -58,6 +58,10 @@ define(['omega/performance'], function (performance) {
     bind: function (call, context) {
       bind(call, context);
       return this;
+    },
+            
+    getTargetFps: function() {
+      return targetFps;
     }
   };
 });

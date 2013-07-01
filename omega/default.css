@@ -20,3 +20,13 @@
     -ms-user-select: none;
     user-select: none;
 }
+
+#omega_debug {
+    margin: 0 auto;
+    border: 1px solid #FFFFFF;
+}
+
+#omega_debug div.plot {
+    height: 100px;
+    margin: 0 10px;
+}
