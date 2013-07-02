@@ -11,7 +11,7 @@ require(['shooter/require.config.js'], function () {
     var x = 0;
 
     o.init(document.getElementById('omegajs'), 1000, 600, 30);
-    new Debug(document.getElementById('omegajs'));
+    new Debug();
 
     // new object
     new Player();

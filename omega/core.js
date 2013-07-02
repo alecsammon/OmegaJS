@@ -181,6 +181,10 @@ define([
             
     getEntities: function() {
       return entities;
+    },
+            
+    getContainer: function() {
+      return container;
     }
   };
 });

@@ -13,8 +13,9 @@ define([
       dataLength = (1000 / pulse.getTargetFps()) * secondsOfData; // points on graph (length of each frame * duration of output)
 
   var debug = {
-    init: function (container) {
-      var fpsData = [],
+    init: function () {
+      var container = o.getContainer().elem,
+          fpsData = [],
           percentageEnterFrameData = [],
           percentageRenderData = [],
           entityData = [],

@@ -49,12 +49,20 @@ define(['omega/device'], function (device) {
     };
 
     this.addClass = function (className) {
-      this.elem.classList.add(className);
+      if(this.elem.classList) {
+        this.elem.classList.add(className);
+      } else {
+        this.elem.className = this.elem.className + ' className';
+      }
       return this;
     };
 
     this.removeClass = function (className) {
-      this.elem.classList.remove(className);
+      if(this.elem.classList) {
+        this.elem.classList.remove(className);
+      } else {
+        this.elem.className = this.elem.className.replace(new RegExp('\\b' + className + '\\b'),'');
+      }
       return this;
     };
   };
