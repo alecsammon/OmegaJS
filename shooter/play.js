@@ -8,16 +8,13 @@ require(['shooter/require.config.js'], function () {
     'shooter/entity/enemy',
     'omega/debug/core'
   ], function (o, pulse, Player, Enemy, Debug) {
-    var x = 0;
-
     o.init(document.getElementById('omegajs'), 1000, 600, 30);
     new Debug();
 
     // new object
     new Player();
-
-    //new Enemy();
-
+    
+    var x = 0;
     pulse.bind(function () {
       --x;
       if (x < 0) {
@@ -25,6 +22,5 @@ require(['shooter/require.config.js'], function () {
         x = 5;
       }
     });
-
   });
 });

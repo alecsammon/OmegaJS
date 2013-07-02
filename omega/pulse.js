@@ -2,7 +2,7 @@ define(['omega/performance'], function (performance) {
 
   'use strict';
 
-  var targetFps = 60,
+  var targetFps,
       frameDurations = [],
       framestart = performance.now(),
       binds = [],
@@ -13,9 +13,7 @@ define(['omega/performance'], function (performance) {
       },
 
       pulse = function () {
-        var tweak,
-            length = frameDurations.length,
-            frameOffset = 1000 / targetFps;
+        var length = frameDurations.length;
 
         frameDurations[length] = performance.now() - framestart;
 
@@ -30,6 +28,9 @@ define(['omega/performance'], function (performance) {
           frameDurations.shift();
         }
 
+        var frameOffset = 1000 / targetFps,
+            tweak;
+    
         if (avg > 1000 / targetFps) {
           tweak = -Math.min(Math.ceil(avg - frameOffset), 50);
         } else {
@@ -39,30 +40,51 @@ define(['omega/performance'], function (performance) {
         setTimeout(function () {
           pulse();
           actualFps = Math.round(1000 / avg);
-
           // loop through binds backwards
           // so binds attached later get called first
           // this is so the debugger works!
           for (var i = binds.length-1; i >= 0; --i) {
             binds[i].call.call(binds[i].context, actualFps);
           }
+          
         }, frameOffset + tweak);
 
         framestart = performance.now();
       };
 
   return {
+    
+    /**
+     * Start the heartbeat
+     * 
+     * @param integer fps
+     * 
+     * @returns Pulse
+     */
     start: function (fps) {
       targetFps = fps;
       pulse();
       return this;
     },
 
+    /**
+     * Add a bind to get called on each pulse
+     * 
+     * @param callback call
+     * @param object   context
+     * 
+     * @return Pulse
+     */
     bind: function (call, context) {
       bind(call, context);
       return this;
     },
             
+    /**
+     * Get the target FPS
+     * 
+     * @returns integer
+     */
     getTargetFps: function() {
       return targetFps;
     }

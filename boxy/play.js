@@ -10,7 +10,7 @@ require(['boxy/require.config.js'], function () {
   ], function (o, Box, Box2, e, Debug) {
     o.init(document.getElementById('omegajs'), 800, 600, 40);
 
-    new Debug(document.getElementById('omegajs'));
+    new Debug();
 
     // new object
     new Box({dom: [0, 0, 150, 150]}, 'red');

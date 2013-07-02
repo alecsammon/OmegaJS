@@ -26,6 +26,7 @@ define([
             if(args.into.name === 'Enemy') {
               alive = false;
               this.addClass('destroy')
+                .removeCollision()
                 .disableFourway()
                 .unbind('EnterFrame', 'Skew')
                 .removeClass('horz')

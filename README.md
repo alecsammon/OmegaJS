@@ -3,13 +3,11 @@ OmegaJS - A Javascript game engine
 
 ## Introduction
 
-Omega allows you to quickly build web games using JavaScript. It provides a **pulse** that provides your framerate, and a **stage** that redraws evevery time the pulse fires. It also provides a way of creating new *entities* and for those entities to inherit **behaviour**.
-
-The following behaviours come bundled with Omega
+Omega allows you to quickly build web games using JavaScript. It provides a **pulse** that provides your framerate, and a **stage** that redraws evevery time the pulse fires. It also provides a way of creating new **entities** and for those entities to inherit **behaviour**.
 
 -----------------------------------------------
 
-## Behaviours
+## Default Behaviours
 
 An overview of the default behaviours that come bundled with Omega. The API of each behavoiur is in the comments of the behaviour.
 
@@ -77,10 +75,10 @@ sudo npm install -g grunt-cli
 
 ### built using
 
-RequireJS - http://requirejs.org
-MD5 - http://pajhome.org.uk/crypt/md5/
-jQuery - http://jquery.com
-Flot - http://github.com/flot/flot
+- RequireJS - http://requirejs.org (MIT or new BSD)
+- MD5 - http://pajhome.org.uk/crypt/md5/ (BSD)
+- jQuery - http://jquery.com (MIT)
+- Flot - http://www.flotcharts.org/ (MIT)
 
 ### @todo
 
@@ -88,5 +86,7 @@ Flot - http://github.com/flot/flot
  - velocity
  - wind
  - gravity
-
+ - timing
+ - sound
+ - preloader
 

@@ -9,8 +9,7 @@ define([
   'use strict';
 
   var secondsOfData = 10,
-      updatesPerSecond = 5,
-      dataLength = (1000 / pulse.getTargetFps()) * secondsOfData; // points on graph (length of each frame * duration of output)
+      updatesPerSecond = 5;
 
   var debug = {
     init: function () {
@@ -19,6 +18,7 @@ define([
           percentageEnterFrameData = [],
           percentageRenderData = [],
           entityData = [],
+          dataLength = (1000 / pulse.getTargetFps()) * secondsOfData,
           next = dataLength,
           frameStart,
           enterFrames = [],
@@ -118,8 +118,8 @@ define([
         percentageRenderData[percentageRenderData.length] = [next, percentageRender + percentageEnterFrame];
 
         timePlot.setData([
-          {data: percentageEnterFrameData, label: 'Frame ready (' + (Math.round(percentageEnterFrame * 10)/10).toFixed(1) + '%)'},
-          {data: percentageRenderData, label: 'Frame rendered (' + (Math.round((percentageRender + percentageEnterFrame)*10)/10).toFixed(1) + '%)'}
+          {data: percentageEnterFrameData, label: 'Modifying Entities (' + (Math.round(percentageEnterFrame * 10)/10).toFixed(1) + '%)'},
+          {data: percentageRenderData, label: 'Rendering Frame (' + (Math.round((percentageRender + percentageEnterFrame)*10)/10).toFixed(1) + '%)'}
         ]);
 
         timePlot.setupGrid();
