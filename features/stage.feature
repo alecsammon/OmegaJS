@@ -8,7 +8,13 @@ Feature: Stage
     When I view the page
     Then I should see the stage element
 
-  Scenario: Creating a stage with dimensions
+  Scenario: Creating a stage on small screen
+    Given I have a small screen
+    And I have started the game
+    When I view the page
+    Then I should see the stage element with the correct dimensions
+
+  Scenario: Creating a stage check dimensions
     Given I have started the game
     When I view the page
     Then I should see the stage element with the correct dimensions
