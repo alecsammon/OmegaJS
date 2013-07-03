@@ -5,17 +5,28 @@ define([
   'omega/behaviour/fourway',
   'shooter/entity/bullet',
   'omega/behaviour/animate',
-  'omega/behaviour/collision'
-], function (o, e, dom, fourway, Bullet, animate, collision) {
+  'omega/behaviour/collision',
+  'omega/behaviour/mouse',
+  'omega/behaviour/follow'
+], function (o, e, dom, fourway, Bullet, animate, collision, mouse, follow) {
 
   'use strict';
 
   return e.extend({
     init: function () {
       var count = 0,
-          alive = true;
+          alive = true,
+          mouseDown = false;
 
-      this.has(dom(o.getAttr().width / 2 - 30, 20, 60, 45), fourway(12), animate, collision)
+      o.bind('MouseDown', function(){
+        mouseDown = true;
+      });
+
+      o.bind('MouseUp', function(){
+        mouseDown = false;
+      });
+
+      this.has(dom(o.getAttr().width / 2 - 30, 20, 60, 45), fourway(12), follow(12), animate, collision, mouse)
           .boundStage()
           .addClass('player')
           .addClass('sprite')
@@ -28,6 +39,7 @@ define([
               this.addClass('destroy')
                 .removeCollision()
                 .disableFourway()
+                .disableFollow()
                 .unbind('EnterFrame', 'Skew')
                 .removeClass('horz')
                 .animate(0, 6, 1, 4, function () {
@@ -43,7 +55,7 @@ define([
             }
           }, 'Skew')
           .bind('EnterFrame', function () {
-            if (alive && this.isKeyDown(17)) {  // ctrl
+            if (alive && (this.isKeyDown(17) || mouseDown)) {  // ctrl
               --count;
               if (count <= 0) {
                 new Bullet(this.x + 22, this.y + 45);

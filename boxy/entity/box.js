@@ -4,9 +4,8 @@ define([
   'omega/behaviour/dom',
   'omega/behaviour/mouse',
   'omega/behaviour/keyboard',
-  'omega/behaviour/text',
   'omega/behaviour/fourway'
-], function (o, e, dom, mouse, keyboard, text, fourway) {
+], function (o, e, dom, mouse, keyboard, fourway) {
 
   'use strict';
 
@@ -16,9 +15,9 @@ define([
     _freeze: false,
 
     init: function (color) {
-      var colors = ['blue', 'red', 'green', 'yellow'];
+      var colors = ['blue', 'red', 'green', 'yellow', 'pink', 'orange', 'purple'];
 
-      this.has(dom, mouse, keyboard, text, fourway)
+      this.has(dom, mouse, keyboard, fourway)
       .setStyles({
         border: '1px solid #FFFFFF',
         color: '#FFFFFF'
@@ -27,7 +26,7 @@ define([
         this.content = 'FPS:' + fps + '<br />UUID:' + this.uuid;
 
         if (this.isKeyDown(17)) {
-          this.setStyle('backgroundColor', colors[Math.round(Math.random() * colors.length)]);
+          this.setStyle('backgroundColor', colors[Math.ceil(Math.random() * colors.length)]);
         }
 
         this.move();
@@ -39,6 +38,7 @@ define([
         this._freeze = false;
       })
       .bind('Click', function () {
+        this.setStyle('backgroundColor', colors[Math.ceil(Math.random() * colors.length-1)]);
         this._left = !this._left;
         this._up = !this._up;
       })

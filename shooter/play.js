@@ -8,8 +8,8 @@ require(['shooter/require.config.js'], function () {
     'shooter/entity/enemy',
     'omega/debug/core'
   ], function (o, pulse, Player, Enemy, Debug) {
-    o.init(document.getElementById('omegajs'), 1000, 300, 40);
-    new Debug();
+    o.init(document.getElementById('omegajs'), 800, 600, 40);
+    //new Debug();
 
     // new object
     new Player();

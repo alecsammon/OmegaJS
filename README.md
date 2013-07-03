@@ -39,7 +39,7 @@ Detects keyboard events and triggers these on the entity
 
 Detects mouse events and triggers these on the entity
 
-### Text
+### Follow
 
 Adds text to the entity
 

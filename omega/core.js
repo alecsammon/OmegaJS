@@ -12,7 +12,7 @@ define([
       nextId = 1,
       binds = {},
       container,
-    
+
       init = function (elem, width, height, fps) {
         var scale = getScaling(width, height);
         attr = {width: width, height: height, scale: scale};
@@ -20,8 +20,7 @@ define([
         // the container
         container = (new Obj(elem)).setStyles({
           width: width * attr.scale + 'px',
-          height: height * attr.scale + 'px',
-          display: 'block'
+          height: height * attr.scale + 'px'
         });
 
         stage.addClass('stage').setStyles({
@@ -32,19 +31,37 @@ define([
         attr.left = container.elem.offsetLeft;
         attr.top = container.elem.offsetTop;
         //stage.lock();
-        
+
         container.appendChild(stage.elem);
-        
+
+        if(device.isTouchDevice()) {
+          // have to create a layer on top of the stage, otherwise touch events do not always fire
+          var overlay = new Obj(document.createElement('div'));
+          overlay.addClass('overlay').setStyles({
+            width: width * attr.scale + 'px',
+            height: height * attr.scale + 'px',
+          });
+            
+          container.appendChild(overlay.elem);
+
+          // prevent defaults
+          window.addEventListener('touchstart', function (e) { e.preventDefault(); });
+          window.addEventListener('touchend', function (e) { e.preventDefault(); });
+          window.addEventListener('touchcancel', function (e) { e.preventDefault(); });
+          window.addEventListener('touchleave', function (e) { e.preventDefault(); });
+          window.addEventListener('touchmove', function (e) { e.preventDefault(); });
+        }
+
         pulse.bind(function (fps)  {
           trigger('EnterFrame', fps);
           trigger('RenderStart');
           var contents = '';
           for (var i in entities) {
             contents += entities[i].string();
-          }      
-        
+          }
+
           stage.elem.innerHTML = contents;
-            
+
           trigger('RenderEnd');
         }).start(fps);
       },
@@ -95,11 +112,13 @@ define([
       trigger = function (action, args) {
         if (binds[action]) {
           for (var i in binds[action].entities) {
-            binds[action].entities[i].call.call(binds[action].entities[i].entity, args);
+            for(var j = 0, jl = binds[action].entities[i].length; j < jl; ++j) {
+              binds[action].entities[i][j].call.call(binds[action].entities[i][j].entity, args);
+            }
           }
 
-          for (var j = 0, bl = binds[action].other.length; j < bl; ++j) {
-            binds[action].other[j].call.call(binds[action].other[j].context, args);
+          for (var k = 0, bl = binds[action].other.length; k < bl; ++k) {
+            binds[action].other[k].call.call(binds[action].other[k].context, args);
           }
         }
       },
@@ -108,9 +127,13 @@ define([
         if (!binds[action]) {
           binds[action] = {entities:{}, other:[]};
         }
- 
+
         if(context && context.uuid) {
-          binds[action].entities[context.uuid] = {call: call, entity: context};
+          if (!binds[action].entities[context.uuid]) {
+            binds[action].entities[context.uuid] = [];
+          }
+
+          binds[action].entities[context.uuid].push({call: call, entity: context});
         } else {
           binds[action].other[binds[action].other.length] = {call: call, context: context};
         }
@@ -140,55 +163,55 @@ define([
       init(container, width, height, fps);
       return this;
     },
-            
+
     register: function (entity) {
       register(entity);
       return this;
     },
-            
+
     unRegister: function (entity) {
       unRegister(entity);
       return this;
     },
-            
+
     addElemToStage: function (elem) {
       stage.appendChild(elem);
       return this;
     },
-            
+
     removeElemFromStage: function (elem) {
       stage.removeChild(elem);
       return this;
     },
-            
+
     getAttr: function () {
       return attr;
     },
-            
+
     trigger: function (action, args) {
       trigger(action, args);
       return this;
     },
-            
+
     bind: function (action, call, context) {
       bind(action, call, context);
       return this;
     },
-            
+
     unbind: function (action, context) {
       unbind(action, context);
       return this;
     },
-            
+
     endScene: function () {
       endScene();
       return this;
     },
-            
+
     getEntities: function() {
       return entities;
     },
-            
+
     getContainer: function() {
       return container;
     }

@@ -3,15 +3,14 @@ define([
   'omega/entity',
   'omega/behaviour/dom',
   'omega/behaviour/collision',
-  'omega/behaviour/text',
   'omega/behaviour/delay'
-], function (o, e, dom, collision, text, delay) {
+], function (o, e, dom, collision, delay) {
 
   'use strict';
 
   return e.extend({
     init: function (x, y) {
-      this.has(dom(x, y, 20, 20), collision, text, delay).addClass('coin');
+      this.has(dom(x, y, 20, 20), collision, delay).addClass('coin');
       this.content = '$';
       this.addCollision('c');
 

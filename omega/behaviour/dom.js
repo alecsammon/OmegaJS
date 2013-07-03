@@ -49,11 +49,8 @@ define(['omega/entity', 'omega/core', 'omega/device'], function (e, o, device) {
      * @var {element}
      */
     elem: null,
-    
     classNames: {},
-    
     style: {},
-
     // ---
 
     /**
@@ -64,9 +61,9 @@ define(['omega/entity', 'omega/core', 'omega/device'], function (e, o, device) {
       y: 0,
       h: 0,
       w: 0,
+      content: null,
       boundStage: false
     },
-
     // ---
 
     /**
@@ -82,8 +79,19 @@ define(['omega/entity', 'omega/core', 'omega/device'], function (e, o, device) {
      *
      * @returns this
      */
-    init: function (x, y, w, h) {
+    init: function (x, y, w, h, content) {
       var dom = {};
+
+      Object.defineProperty(this, 'content', {
+        set: function (value) {
+          this.dom.content = value;
+        },
+        get: function () {
+          return this.dom.content;
+        }
+      });
+
+      this.content = (content && content.text && content.text.content) ? content.text.content : null;
 
       var watchAttr = function (propName, style) {
         var obj = this;
@@ -109,7 +117,7 @@ define(['omega/entity', 'omega/core', 'omega/device'], function (e, o, device) {
               obj.trigger('ExitFrame', 'bottom');
             } else if (propName === 'x' && value > o.getAttr().width) {
               obj.trigger('ExitFrame', 'right');
-            } else if (propName === 'x' && value < -obj.dom-w) {
+            } else if (propName === 'x' && value < -obj.dom - w) {
               obj.trigger('ExitFrame', 'left');
             }
           },
@@ -139,20 +147,20 @@ define(['omega/entity', 'omega/core', 'omega/device'], function (e, o, device) {
       this.dom.boundStage = (typeof value === 'undefined' || value);
       return this;
     },
-            
-    string: function  () {
-      var style = '';//left:'+this.x+'px, bottom: '+this.y+'px; height: '+20+'px; width: '+20+'px';
-      var className = '';
-      
-      for(var i in this.style) {
-        style += i.replace(/([a-z])([A-Z])/g, '$1-$2').toLowerCase()+':'+this.style[i]+';';
+
+    string: function () {
+      var style = '';
+      var classString = '';
+
+      for (var i in this.style) {
+        style += i.replace(/([a-z])([A-Z])/g, '$1-$2').toLowerCase() + ':' + this.style[i] + ';';
       }
-            
-      for(var i in this.classNames) {
-        className += ' '+i;
-      }      
-            
-      return '<div class="'+className+'" style="'+style+'"></div>';
+
+      for (var j in this.classNames) {
+        classString += ' ' + j;
+      }
+
+      return '<div class="' + classString + '" style="' + style + '">' + (this.content ? this.content : '') + '</div>';
     },
 
     nudge: function (x, y) {
@@ -177,9 +185,9 @@ define(['omega/entity', 'omega/core', 'omega/device'], function (e, o, device) {
       default:
         this.style[styleType] = style;
       }
+      
       return this;
     },
-
     /**
      * Set multiple styles
      *
@@ -199,12 +207,10 @@ define(['omega/entity', 'omega/core', 'omega/device'], function (e, o, device) {
       }
       return this;
     },
-
     addClass: function (className) {
       this.classNames[className] = true;
       return this;
     },
-
     removeClass: function (className) {
       delete this.classNames[className];
       return this;
