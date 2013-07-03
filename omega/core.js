@@ -24,6 +24,7 @@ define([
         });
 
         stage.addClass('stage').setStyles({
+          width: width + 'px',
           height: height + 'px',
           transform: 'scale(' + attr.scale + ')'
         });

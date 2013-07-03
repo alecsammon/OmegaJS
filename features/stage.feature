@@ -11,4 +11,4 @@ Feature: Stage
   Scenario: Creating a stage with dimensions
     Given I have started the game
     When I view the page
-    Then I should see a stage element with the correct dimensions
+    Then I should see the stage element with the correct dimensions

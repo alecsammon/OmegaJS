@@ -41,7 +41,7 @@ Detects mouse events and triggers these on the entity
 
 ### Follow
 
-Adds text to the entity
+Simple method for making an entity follow the mouse 
 
 -----------------------------------------------
 

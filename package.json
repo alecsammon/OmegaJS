@@ -1,15 +1,33 @@
 {
-  "name": "OmegaJs",
-  "version": "0.1.0",
-  "private": true,
-  "devDependencies": {
-    "grunt": "latest",
-    "requirejs": "latest",
-    "grunt-contrib-jshint": "latest",
-    "grunt-contrib-csslint": "latest",
-    "grunt-cucumber": "latest",
-    "cucumber-js": "git://github.com/atrniv/cucumber-js.git",
-    "jsdom": "latest",
-    "should": "latest"
-  }
+    "name": "OmegaJS",
+    "version": "0.1.0",
+    "author": "Alec Sammon <alec.sammon@googlemail.com>",
+    "description": "A Javascript game engine",
+    "private": true,
+    "homepage": "https://github.com/alecsammon/OmegaJS",
+    "keywords": ["javascript", "game"],
+    "maintainers": [
+        {
+            "name": "Alec Sammon",
+            "email": "alec.sammon@googlemail.com"
+        }
+    ],
+    "license": "MIT",
+    "repository": {
+        "type": "git", 
+        "url": "https://github.com/alecsammon/OmegaJS.git"
+    },
+    "devDependencies": {
+        "grunt": "latest",
+        "requirejs": "latest",
+        "grunt-contrib-jshint": "latest",
+        "grunt-contrib-csslint": "latest",
+        "grunt-cucumber": "latest",
+        "cucumber-js": "git://github.com/atrniv/cucumber-js.git",
+        "jsdom": "latest",
+        "should": "latest"
+    },
+    "engines": {
+      "node": ">=0.8"
+    }
 }

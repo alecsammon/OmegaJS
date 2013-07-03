@@ -3,7 +3,7 @@ define([], function () {
   'use strict';
 
   var getUserAgent = function () {
-    return (navigator && navigator.userAgent) ? navigator.userAgent.toLowerCase() : null;
+    return (window.navigator && window.navigator.userAgent) ? window.navigator.userAgent.toLowerCase() : null;
   };
 
   return {
