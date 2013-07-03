@@ -147,13 +147,11 @@ define(['omega/entity', 'omega/core', 'omega/device'], function (e, o, device) {
       for(var i in this.style) {
         style += i.replace(/([a-z])([A-Z])/g, '$1-$2').toLowerCase()+':'+this.style[i]+';';
       }
-      
-      
+            
       for(var i in this.classNames) {
         className += ' '+i;
       }      
-      
-      
+            
       return '<div class="'+className+'" style="'+style+'"></div>';
     },
 

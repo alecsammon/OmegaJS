@@ -41,7 +41,7 @@ define([
           var contents = '';
           for (var i in entities) {
             contents += entities[i].string();
-          }       
+          }      
         
           stage.elem.innerHTML = contents;
             
