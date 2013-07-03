@@ -49,6 +49,10 @@ define(['omega/entity', 'omega/core', 'omega/device'], function (e, o, device) {
      * @var {element}
      */
     elem: null,
+    
+    classNames: {},
+    
+    style: {},
 
     // ---
 
@@ -79,8 +83,6 @@ define(['omega/entity', 'omega/core', 'omega/device'], function (e, o, device) {
      * @returns this
      */
     init: function (x, y, w, h) {
-      this.elem = document.createElement('div');
-      o.addElemToStage(this.elem);
       var dom = {};
 
       var watchAttr = function (propName, style) {
@@ -137,6 +139,23 @@ define(['omega/entity', 'omega/core', 'omega/device'], function (e, o, device) {
       this.dom.boundStage = (typeof value === 'undefined' || value);
       return this;
     },
+            
+    string: function  () {
+      var style = '';//left:'+this.x+'px, bottom: '+this.y+'px; height: '+20+'px; width: '+20+'px';
+      var className = '';
+      
+      for(var i in this.style) {
+        style += i.replace(/([a-z])([A-Z])/g, '$1-$2').toLowerCase()+':'+this.style[i]+';';
+      }
+      
+      
+      for(var i in this.classNames) {
+        className += ' '+i;
+      }      
+      
+      
+      return '<div class="'+className+'" style="'+style+'"></div>';
+    },
 
     nudge: function (x, y) {
       this.x += x;
@@ -155,10 +174,10 @@ define(['omega/entity', 'omega/core', 'omega/device'], function (e, o, device) {
       switch (styleType) {
       case 'TransformOrigin':
       case 'Transform':
-        this.elem.style[device.getCssPrefix() + styleType] = style;
+        this.style[device.getCssPrefix() + styleType] = style;
         break;
       default:
-        this.elem.style[styleType] = style;
+        this.style[styleType] = style;
       }
       return this;
     },
@@ -184,17 +203,13 @@ define(['omega/entity', 'omega/core', 'omega/device'], function (e, o, device) {
     },
 
     addClass: function (className) {
-      this.elem.classList.add(className);
+      this.classNames[className] = true;
       return this;
     },
 
     removeClass: function (className) {
-      this.elem.classList.remove(className);
+      delete this.classNames[className];
       return this;
-    },
-
-    destroy: function () {
-      o.removeElemFromStage(this.elem);
     }
 
   });

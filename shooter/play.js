@@ -8,7 +8,7 @@ require(['shooter/require.config.js'], function () {
     'shooter/entity/enemy',
     'omega/debug/core'
   ], function (o, pulse, Player, Enemy, Debug) {
-    o.init(document.getElementById('omegajs'), 1000, 600, 30);
+    o.init(document.getElementById('omegajs'), 1000, 600, 60);
     new Debug();
 
     // new object
@@ -19,7 +19,8 @@ require(['shooter/require.config.js'], function () {
       --x;
       if (x < 0) {
         new Enemy();
-        x = 5;
+        new Enemy();
+        x = 1;
       }
     });
   });

@@ -216,7 +216,7 @@ define(['omega/core', 'omega/lib/md5'], function (o, h) {
         newE = on;
         args = newE.initArgs;
       }
-
+      
       // attach all the propeties of this to the entity
       for (var key in newE) {
         if (ignoredProperties.indexOf(key) === -1) {

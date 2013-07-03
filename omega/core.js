@@ -33,12 +33,18 @@ define([
         attr.top = container.elem.offsetTop;
         //stage.lock();
         
-        container.elem.innerHTML = stage.elem.outerHTML;
- 
+        container.appendChild(stage.elem);
+        
         pulse.bind(function (fps)  {
           trigger('EnterFrame', fps);
           trigger('RenderStart');
-          container.elem.innerHTML = stage.elem.outerHTML;
+          var contents = '';
+          for (var i in entities) {
+            contents += entities[i].string();
+          }       
+        
+          stage.elem.innerHTML = contents;
+            
           trigger('RenderEnd');
         }).start(fps);
       },

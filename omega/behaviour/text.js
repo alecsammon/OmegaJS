@@ -21,13 +21,13 @@ define(['omega/entity', 'omega/behaviour/dom'], function (e, dom) {
      * @returns this
      */
     init: function (args) {
-      this.has(dom);
+      //this.has(dom);
 
       Object.defineProperty(this, 'content', {
         set: function (value) {
           if (this.text.content !== value) {
             this.text.contents = value;
-            this.elem.innerHTML = value;
+            //this.elem.innerHTML = value;
           }
         },
         get: function () {
