@@ -13,5 +13,5 @@ window = document.createWindow();
 window.performance = {};
 window.performance.now = function() {
   var now = process.hrtime();
-  return (now[0]+'.'+now[1]);
+  return (now[0]+'.'+now[1])*1;
 };

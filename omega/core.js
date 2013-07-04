@@ -6,16 +6,28 @@ define([
 
   'use strict';
 
-  var stage = new Obj(document.createElement('div')),
-      attr = {width: 0, height: 0, scale: 1},
+  var stage,
+      attr = {},
       entities = {},
       nextId = 1,
       binds = {},
       container,
 
+      /**
+       * this.init
+       * Create the stage and starts the pulse
+       *
+       * @param elem   {Dom Element}
+       * @param width  integer
+       * @param height integer
+       * @param fps    integer
+       */
       init = function (elem, width, height, fps) {
-        var scale = getScaling(width, height);
-        attr = {width: width, height: height, scale: scale};
+        attr = {
+          width: width,
+          height: height, 
+          scale: getScaling(width, height)
+        };
 
         // the container
         container = (new Obj(elem)).setStyles({
@@ -23,7 +35,7 @@ define([
           height: height * attr.scale + 'px'
         });
 
-        stage.addClass('stage').setStyles({
+        stage = (new Obj(document.createElement('div'))).addClass('stage').setStyles({
           width: width + 'px',
           height: height + 'px',
           transform: 'scale(' + attr.scale + ')'
@@ -37,13 +49,7 @@ define([
 
         if(device.isTouchDevice()) {
           // have to create a layer on top of the stage, otherwise touch events do not always fire
-          var overlay = new Obj(document.createElement('div'));
-          overlay.addClass('overlay').setStyles({
-            width: width * attr.scale + 'px',
-            height: height * attr.scale + 'px',
-          });
-            
-          container.appendChild(overlay.elem);
+          container.elem.innerHTML += '<div class="overlay" style="width: ' + width + 'px; height: ' + height + 'px;"></div>';
 
           // prevent defaults
           window.addEventListener('touchstart', function (e) { e.preventDefault(); });
@@ -58,7 +64,7 @@ define([
           trigger('RenderStart');
           var contents = '';
           for (var i in entities) {
-            contents += entities[i].string();
+            contents += (typeof entities[i].string === 'function') ? entities[i].string() : null;
           }
 
           stage.elem.innerHTML = contents;
@@ -110,6 +116,13 @@ define([
         }
       },
 
+      /**
+       * this.trigger
+       * Trigger an event on all the bound methods
+       *
+       * @param string The name of the trigger
+       * @param args   Additional arguments
+       */
       trigger = function (action, args) {
         if (binds[action]) {
           for (var i in binds[action].entities) {
