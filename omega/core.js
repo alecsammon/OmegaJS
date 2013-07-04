@@ -146,7 +146,7 @@ define([
 
       getScaling = function (width, height) {
         var scale = Math.min(
-                window.innerWidth / (width + 2),
+                window.innerWidth / (width + 2), // +2 allows for border
                 window.innerHeight / (height + 2)
                 );
 

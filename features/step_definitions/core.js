@@ -29,8 +29,8 @@ var core = function () {
   this.Then(/^I should see the stage element with the correct dimensions$/, function(callback) {
     var scale = (window.innerHeight > height) ? 1 : window.innerHeight/(height+2);
     // check game
-    (Math.round(game.style.width.replace('px', '')*1000)/1000).should.equal((Math.round(scale*width*1000)/1000));
-    (Math.round(game.style.height.replace('px', '')*1000)/1000).should.equal((Math.round(scale*height*1000)/1000)); 
+    game.style.width.should.equal(scale*width+'px');
+    game.style.height.should.equal(scale*height+'px'); 
     
     // check stage
     game.childNodes[0].style.width.should.equal(width+'px');
