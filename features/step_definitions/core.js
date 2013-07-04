@@ -1,19 +1,17 @@
 var core = function () {
   'use strict';
   var game,
-      height = 800,
-      width = 600,
-      scale = 1;
+      width = 800,
+      height = 600;
   
   this.Given(/^I have a small screen$/, function(callback) {
     window.innerHeight = 400;
-    scale = 0.66445182724;
     callback();
   });
 
   this.Given(/^I have started the game$/, function (callback) {
     var container = document.getElementById('omega');
-    requirejs('omega/core').init(container, height, width);
+    requirejs('omega/core').init(container, width, height);
     callback();
   });
 
@@ -29,13 +27,14 @@ var core = function () {
   });
   
   this.Then(/^I should see the stage element with the correct dimensions$/, function(callback) {
+    var scale = (window.innerHeight > height) ? 1 : window.innerHeight/(height+2);
     // check game
-    game.style.width.should.equal((scale*height)+'px');
-    game.style.height.should.equal((scale*width)+'px'); 
+    (Math.round(game.style.width.replace('px', '')*1000)/1000).should.equal((Math.round(scale*width*1000)/1000));
+    (Math.round(game.style.height.replace('px', '')*1000)/1000).should.equal((Math.round(scale*height*1000)/1000)); 
     
     // check stage
-    game.childNodes[0].style.width.should.equal(height+'px');
-    game.childNodes[0].style.height.should.equal(width+'px'); 
+    game.childNodes[0].style.width.should.equal(width+'px');
+    game.childNodes[0].style.height.should.equal(height+'px'); 
     callback();   
   });
   

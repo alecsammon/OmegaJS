@@ -1,7 +1,6 @@
 var myHooks = function () {
-  this.Before(function(callback) {
+  this.After(function(callback) {
     window.innerHeight = 768;
-    
     // Don't forget to tell Cucumber when you're done:
     callback();
   });
